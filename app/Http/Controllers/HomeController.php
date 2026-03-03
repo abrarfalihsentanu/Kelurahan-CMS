@@ -9,6 +9,7 @@ use App\Models\Service;
 use App\Models\Agenda;
 use App\Models\Official;
 use App\Models\ServiceHour;
+use App\Models\Gallery;
 
 class HomeController extends Controller
 {
@@ -21,6 +22,7 @@ class HomeController extends Controller
         $agendas = Agenda::published()->upcoming()->take(4)->get();
         $lurah = Official::where('level', 'lurah')->active()->first();
         $serviceHours = ServiceHour::ordered()->get();
+        $galleries = Gallery::where('is_active', true)->orderBy('order')->take(8)->get();
 
         return view('home', compact(
             'sliders',
@@ -29,7 +31,8 @@ class HomeController extends Controller
             'services',
             'agendas',
             'lurah',
-            'serviceHours'
+            'serviceHours',
+            'galleries'
         ));
     }
 }

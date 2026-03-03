@@ -121,6 +121,12 @@ return [
     'home_form_request' => 'Request Form',
     'home_form_objection' => 'Objection Form',
 
+    // ===== GALLERY =====
+    'home_gallery_badge' => 'Documentation',
+    'home_gallery_title' => 'Activity Gallery',
+    'home_gallery_empty' => 'No gallery items yet.',
+    'home_gallery_video' => 'Video',
+
     // ===== PERANGKAT PAGE =====
     'perangkat_title' => 'Village Officials',
     'perangkat_desc' => 'Organization structure and officials of Kelurahan Petamburan serving the community.',

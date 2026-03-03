@@ -38,13 +38,13 @@
         </div>
     </div>
     <div class="col-md-4">
-        <div class="mb-3">
-            <label class="form-label">Gambar @if (!isset($gallery))
-                    <span class="text-danger">*</span>
-                @endif
+        <div class="mb-3" id="image_field">
+            <label class="form-label">Gambar <span class="text-danger" id="image_required_star">*</span>
             </label>
             <input type="file" name="image" class="form-control @error('image') is-invalid @enderror"
                 accept="image/*">
+            <small class="text-muted" id="image_hint_video" style="display:none">Opsional — digunakan sebagai thumbnail
+                video.</small>
             @if (isset($gallery) && $gallery->image)
                 <img src="{{ Storage::url($gallery->image) }}" alt="" class="mt-2 rounded"
                     style="max-width:100%;max-height:150px">
@@ -66,8 +66,13 @@
 
 @push('scripts')
     <script>
-        document.getElementById('gallery_type').addEventListener('change', function() {
-            document.getElementById('video_url_field').style.display = this.value === 'video' ? '' : 'none';
-        });
+        function toggleGalleryType() {
+            var isVideo = document.getElementById('gallery_type').value === 'video';
+            document.getElementById('video_url_field').style.display = isVideo ? '' : 'none';
+            document.getElementById('image_required_star').style.display = isVideo ? 'none' : '';
+            document.getElementById('image_hint_video').style.display = isVideo ? '' : 'none';
+        }
+        document.getElementById('gallery_type').addEventListener('change', toggleGalleryType);
+        toggleGalleryType();
     </script>
 @endpush

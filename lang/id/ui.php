@@ -121,6 +121,12 @@ return [
     'home_form_request' => 'Form Permohonan',
     'home_form_objection' => 'Form Keberatan',
 
+    // ===== GALLERY =====
+    'home_gallery_badge' => 'Dokumentasi',
+    'home_gallery_title' => 'Galeri Kegiatan',
+    'home_gallery_empty' => 'Belum ada galeri.',
+    'home_gallery_video' => 'Video',
+
     // ===== PERANGKAT PAGE =====
     'perangkat_title' => 'Perangkat Kelurahan',
     'perangkat_desc' => 'Struktur organisasi dan susunan pejabat Kelurahan Petamburan yang melayani masyarakat.',

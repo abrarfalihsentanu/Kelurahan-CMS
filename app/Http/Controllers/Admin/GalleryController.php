@@ -25,15 +25,20 @@ class GalleryController extends Controller
         $validated = $request->validate([
             'title' => 'required|max:255',
             'description' => 'nullable',
-            'image' => 'required|image|mimes:jpeg,png,jpg,webp|max:4096',
-            'type' => 'required|in:photo,video',
-            'video_url' => 'nullable|url|max:255',
+            'image' => 'required_if:type,image|nullable|image|mimes:jpeg,png,jpg,webp|max:4096',
+            'type' => 'required|in:image,video',
+            'video_url' => 'required_if:type,video|nullable|url|max:255',
             'order' => 'nullable|integer',
             'is_active' => 'boolean',
+        ], [
+            'image.required_if' => 'Gambar wajib diunggah untuk tipe Gambar.',
+            'video_url.required_if' => 'URL Video wajib diisi untuk tipe Video.',
         ]);
 
         if ($request->hasFile('image')) {
             $validated['image'] = $request->file('image')->store('galleries', 'public');
+        } else {
+            $validated['image'] = null;
         }
 
         $validated['is_active'] = $request->boolean('is_active');
@@ -54,10 +59,12 @@ class GalleryController extends Controller
             'title' => 'required|max:255',
             'description' => 'nullable',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:4096',
-            'type' => 'required|in:photo,video',
-            'video_url' => 'nullable|url|max:255',
+            'type' => 'required|in:image,video',
+            'video_url' => 'required_if:type,video|nullable|url|max:255',
             'order' => 'nullable|integer',
             'is_active' => 'boolean',
+        ], [
+            'video_url.required_if' => 'URL Video wajib diisi untuk tipe Video.',
         ]);
 
         if ($request->hasFile('image')) {

@@ -339,6 +339,57 @@
         </aside>
     </div>
 
+    <!-- ===== GALERI KEGIATAN ===== -->
+    <section class="section-block" style="max-width:1320px; margin:0 auto 32px; padding:0 24px;">
+        <div class="section-header">
+            <div class="section-title-group">
+                <span class="section-badge">{{ __('ui.home_gallery_badge') }}</span>
+                <h2 class="section-title">{{ __('ui.home_gallery_title') }}</h2>
+            </div>
+        </div>
+        <div class="gallery-grid">
+            @forelse($galleries as $gallery)
+                <div class="gallery-item"
+                    @if ($gallery->type === 'video' && $gallery->video_url) onclick="openGalleryVideo('{{ addslashes($gallery->video_url) }}', '{{ addslashes($gallery->title) }}')"
+                    @else
+                        onclick="openGalleryLightbox('{{ asset('storage/' . $gallery->image) }}', '{{ addslashes($gallery->title) }}')" @endif>
+                    @if ($gallery->image)
+                        <img src="{{ asset('storage/' . $gallery->image) }}" alt="{{ $gallery->title }}"
+                            loading="lazy">
+                    @else
+                        <div class="gallery-item-placeholder">
+                            <i class="fa {{ $gallery->type === 'video' ? 'fa-play-circle' : 'fa-image' }}"></i>
+                        </div>
+                    @endif
+                    <div class="gallery-item-overlay">
+                        <span>{{ $gallery->title }}</span>
+                    </div>
+                    @if ($gallery->type === 'video')
+                        <span class="gallery-item-badge"><i class="fa fa-play"></i>
+                            {{ __('ui.home_gallery_video') }}</span>
+                    @endif
+                </div>
+            @empty
+                <p>{{ __('ui.home_gallery_empty') }}</p>
+            @endforelse
+        </div>
+    </section>
+
+    <!-- Gallery Lightbox -->
+    <div class="gallery-lightbox" id="galleryLightbox" onclick="closeGalleryLightbox(event)">
+        <button class="gallery-lightbox-close" onclick="closeGalleryLightbox(event)"><i class="fa fa-times"></i></button>
+        <img id="galleryLightboxImg" src="" alt="" style="display:none">
+        <iframe id="galleryLightboxVideo" src="" frameborder="0" allowfullscreen
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            referrerpolicy="no-referrer-when-downgrade"
+            style="display:none; width:90vw; max-width:900px; height:50.625vw; max-height:506px; border-radius:12px;"></iframe>
+        <div class="gallery-lightbox-caption" id="galleryLightboxCaption"></div>
+        <a id="galleryLightboxYtLink" href="#" target="_blank" rel="noopener noreferrer"
+            style="display:none; margin-top:10px; color:#fff; background:#c00; padding:8px 18px; border-radius:6px; text-decoration:none; font-size:15px; font-weight:600;">
+            <i class="fab fa-youtube"></i> Buka di YouTube
+        </a>
+    </div>
+
     <!-- ===== BANNER PPID ===== -->
     <section class="ppid-banner">
         <div class="ppid-banner-inner">
@@ -358,4 +409,71 @@
             </div>
         </div>
     </section>
+
 @endsection
+
+@push('scripts')
+    <script>
+        function getYouTubeEmbedUrl(url) {
+            var match = url.match(
+                /(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/|live\/|v\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
+            return match ? 'https://www.youtube-nocookie.com/embed/' + match[1] + '?autoplay=1&rel=0' : null;
+        }
+
+        function getYouTubeWatchUrl(url) {
+            var match = url.match(
+                /(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/|live\/|v\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
+            return match ? 'https://www.youtube.com/watch?v=' + match[1] : url;
+        }
+
+        function openGalleryLightbox(src, title) {
+            document.getElementById('galleryLightboxVideo').style.display = 'none';
+            document.getElementById('galleryLightboxVideo').src = '';
+            document.getElementById('galleryLightboxYtLink').style.display = 'none';
+            var img = document.getElementById('galleryLightboxImg');
+            img.src = src;
+            img.style.display = '';
+            document.getElementById('galleryLightboxCaption').textContent = title;
+            document.getElementById('galleryLightbox').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function openGalleryVideo(url, title) {
+            document.getElementById('galleryLightboxImg').style.display = 'none';
+            document.getElementById('galleryLightboxImg').src = '';
+            var iframe = document.getElementById('galleryLightboxVideo');
+            var ytLink = document.getElementById('galleryLightboxYtLink');
+            var embedUrl = getYouTubeEmbedUrl(url);
+            if (embedUrl) {
+                iframe.src = embedUrl;
+                iframe.style.display = '';
+                ytLink.href = getYouTubeWatchUrl(url);
+                ytLink.style.display = '';
+            } else {
+                window.open(url, '_blank');
+                return;
+            }
+            document.getElementById('galleryLightboxCaption').textContent = title;
+            document.getElementById('galleryLightbox').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeGalleryLightbox(e) {
+            if (e.target === document.getElementById('galleryLightbox') ||
+                e.currentTarget.classList.contains('gallery-lightbox-close')) {
+                document.getElementById('galleryLightbox').classList.remove('active');
+                document.getElementById('galleryLightboxVideo').src = '';
+                document.getElementById('galleryLightboxYtLink').style.display = 'none';
+                document.body.style.overflow = '';
+            }
+        }
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                document.getElementById('galleryLightbox').classList.remove('active');
+                document.getElementById('galleryLightboxVideo').src = '';
+                document.getElementById('galleryLightboxYtLink').style.display = 'none';
+                document.body.style.overflow = '';
+            }
+        });
+    </script>
+@endpush

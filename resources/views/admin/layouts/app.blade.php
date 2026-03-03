@@ -43,7 +43,7 @@
 
         .sidebar-brand {
             padding: 20px;
-            text-align: center;
+            text-align: left;
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
 
