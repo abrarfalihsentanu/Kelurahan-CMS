@@ -41,7 +41,8 @@ class PageController extends Controller
             $validated['image'] = $request->file('image')->store('pages', 'public');
         }
 
-        $validated['is_active'] = $request->boolean('is_active');
+        $validated['is_published'] = $request->boolean('is_active');
+        unset($validated['is_active']);
         Page::create($validated);
 
         return redirect()->route('admin.pages.index')
@@ -76,7 +77,8 @@ class PageController extends Controller
             $validated['image'] = $request->file('image')->store('pages', 'public');
         }
 
-        $validated['is_active'] = $request->boolean('is_active');
+        $validated['is_published'] = $request->boolean('is_active');
+        unset($validated['is_active']);
         $page->update($validated);
 
         return redirect()->route('admin.pages.index')

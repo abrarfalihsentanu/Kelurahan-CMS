@@ -46,6 +46,7 @@ return [
     'nav_complaints' => 'Complaints',
     'nav_ppid' => 'PPID',
     'nav_contact' => 'Contact',
+    'nav_pages' => 'Important',
 
     // ===== FOOTER =====
     'footer_services' => 'Services',
@@ -217,9 +218,21 @@ return [
     'informasi_infographic_badge' => 'Visual',
     'informasi_infographic_title' => 'Infographics',
     'informasi_no_infographic' => 'No infographics yet.',
+    'infographic_page_title' => 'Infographics',
+    'infographic_page_desc' => 'Visual data and infographics collection of Kelurahan Petamburan.',
+    'infographic_detail' => 'View Detail',
+    'infographic_back' => 'Back to Infographics',
+    'infographic_related' => 'Related Infographics',
+    'infographic_categories' => 'Infographic Categories',
     'informasi_potential_badge' => 'Featured',
     'informasi_potential_title' => 'Village Potential',
     'informasi_no_potential' => 'No potential data yet.',
+    'potential_page_title' => 'Village Potential',
+    'potential_page_desc' => 'Featured potentials and advantages of Kelurahan Petamburan.',
+    'potential_detail' => 'View Detail',
+    'potential_back' => 'Back to Potentials',
+    'potential_related' => 'Related Potentials',
+    'potential_categories' => 'Potential Categories',
 
     // Public Information Documents
     'informasi_pubdoc_badge' => 'Documents',

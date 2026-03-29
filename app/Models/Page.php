@@ -14,6 +14,8 @@ class Page extends Model
         'title',
         'slug',
         'content',
+        'excerpt',
+        'image',
         'template',
         'meta_title',
         'meta_description',

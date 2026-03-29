@@ -120,52 +120,45 @@
                         <span class="section-badge">{{ __('ui.informasi_infographic_badge') }}</span>
                         <h2 class="section-title">{{ __('ui.informasi_infographic_title') }}</h2>
                     </div>
+                    <a href="{{ route('infografis') }}" class="btn-all">{{ __('ui.view_all') }} <i
+                            class="fa fa-arrow-right"></i></a>
                 </div>
 
                 @if ($infographics->count() > 0)
-                    @php
-                        $groupedInfographics = $infographics->groupBy('category');
-                    @endphp
-                    @foreach ($groupedInfographics as $category => $items)
-                        <div class="infografis-section">
-                            <h3 class="infografis-subtitle"><i class="fa fa-chart-bar"></i> {{ $category ?: 'Infografis' }}
-                            </h3>
-                            <div class="infografis-image-grid"
-                                style="display:grid;grid-template-columns:repeat(auto-fill, minmax(280px, 1fr));gap:20px;">
-                                @foreach ($items as $infographic)
-                                    <div class="infografis-image-card"
-                                        style="background:#fff;border-radius:var(--radius-lg);overflow:hidden;box-shadow:var(--shadow-sm);transition:transform 0.2s, box-shadow 0.2s;">
-                                        <div style="position:relative;padding-top:75%;overflow:hidden;">
-                                            <img src="{{ asset('storage/' . $infographic->image) }}"
-                                                alt="{{ $infographic->title }}"
-                                                style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;">
-                                        </div>
-                                        <div style="padding:16px;">
-                                            <h4
-                                                style="font-size:14px;font-weight:700;color:var(--gray-900);margin-bottom:6px;">
-                                                {{ $infographic->title }}</h4>
-                                            @if ($infographic->description)
-                                                <p style="font-size:12.5px;color:var(--gray-600);line-height:1.5;">
-                                                    {{ Str::limit($infographic->description, 100) }}</p>
+                    <div class="berita-grid">
+                        @foreach ($infographics->take(6) as $infographic)
+                            <article class="berita-card">
+                                <div class="berita-card-img"
+                                    style="background-image:url('{{ $infographic->image ? asset('storage/' . $infographic->image) : asset('assets/img/news-placeholder.svg') }}')">
+                                    @if ($infographic->informationCategory)
+                                        <span class="berita-cat">{{ $infographic->informationCategory->name }}</span>
+                                    @endif
+                                </div>
+                                <div class="berita-card-body">
+                                    @if ($infographic->source || $infographic->year)
+                                        <div class="berita-card-date">
+                                            @if ($infographic->source)
+                                                <i class="fa fa-database"></i> {{ $infographic->source }}
                                             @endif
-                                            @if ($infographic->source || $infographic->year)
-                                                <div style="margin-top:10px;font-size:11px;color:var(--gray-500);">
-                                                    @if ($infographic->source)
-                                                        <span><i class="fa fa-database"></i>
-                                                            {{ $infographic->source }}</span>
-                                                    @endif
-                                                    @if ($infographic->year)
-                                                        <span style="margin-left:10px;"><i class="fa fa-calendar"></i>
-                                                            {{ $infographic->year }}</span>
-                                                    @endif
-                                                </div>
+                                            @if ($infographic->year)
+                                                &nbsp;<i class="fa fa-calendar"></i> {{ $infographic->year }}
                                             @endif
                                         </div>
-                                    </div>
-                                @endforeach
-                            </div>
-                        </div>
-                    @endforeach
+                                    @endif
+                                    <h3 class="berita-card-title">
+                                        <a
+                                            href="{{ route('infografis.show', $infographic->id) }}">{{ $infographic->title }}</a>
+                                    </h3>
+                                    @if ($infographic->description)
+                                        <p class="berita-card-excerpt">{{ Str::limit($infographic->description, 120) }}</p>
+                                    @endif
+                                    <a href="{{ route('infografis.show', $infographic->id) }}" class="berita-read-more">
+                                        {{ __('ui.infographic_detail') }} <i class="fa fa-arrow-right"></i>
+                                    </a>
+                                </div>
+                            </article>
+                        @endforeach
+                    </div>
                 @else
                     <div
                         style="text-align:center;padding:40px;background:#fff;border-radius:var(--radius-lg);box-shadow:var(--shadow-sm);">
@@ -182,34 +175,42 @@
                         <span class="section-badge">{{ __('ui.informasi_potential_badge') }}</span>
                         <h2 class="section-title">{{ __('ui.informasi_potential_title') }}</h2>
                     </div>
+                    <a href="{{ route('potensi') }}" class="btn-all">{{ __('ui.view_all') }} <i
+                            class="fa fa-arrow-right"></i></a>
                 </div>
 
-                <div class="potensi-grid">
-                    @forelse($potentials as $potential)
-                        <div class="potensi-card">
-                            <div class="potensi-card-visual"
-                                style="background-image:url('{{ $potential->image ? asset('storage/' . $potential->image) : asset('assets/img/potensi-placeholder.svg') }}');">
-                            </div>
-                            <div class="potensi-card-body">
-                                <div class="potensi-card-icon" style="background:var(--orange);"><i
-                                        class="{{ $potential->icon ?? 'fa fa-star' }}"></i></div>
-                                <h3>{{ $potential->title }}</h3>
-                                <p>{!! $potential->description !!}</p>
-                                @if ($potential->content)
-                                    <div style="font-size:13px;color:var(--gray-600);margin-top:8px;">
-                                        {!! Str::limit(strip_tags($potential->content), 150) !!}
-                                    </div>
-                                @endif
-                            </div>
-                        </div>
-                    @empty
-                        <div
-                            style="text-align:center;padding:40px;background:#fff;border-radius:var(--radius-lg);box-shadow:var(--shadow-sm);grid-column:1/-1;">
-                            <i class="fa fa-gem" style="font-size:48px;color:var(--gray-300);margin-bottom:16px;"></i>
-                            <p style="color:var(--gray-500);">{{ __('ui.informasi_no_potential') }}</p>
-                        </div>
-                    @endforelse
-                </div>
+                @if ($potentials->count() > 0)
+                    <div class="berita-grid">
+                        @foreach ($potentials->take(6) as $potential)
+                            <article class="berita-card">
+                                <div class="berita-card-img"
+                                    style="background-image:url('{{ $potential->image ? asset('storage/' . $potential->image) : asset('assets/img/news-placeholder.svg') }}')">
+                                    @if ($potential->informationCategory)
+                                        <span class="berita-cat">{{ $potential->informationCategory->name }}</span>
+                                    @endif
+                                </div>
+                                <div class="berita-card-body">
+                                    <h3 class="berita-card-title">
+                                        <a href="{{ route('potensi.show', $potential->id) }}">{{ $potential->title }}</a>
+                                    </h3>
+                                    @if ($potential->description)
+                                        <p class="berita-card-excerpt">
+                                            {{ Str::limit(strip_tags($potential->description), 120) }}</p>
+                                    @endif
+                                    <a href="{{ route('potensi.show', $potential->id) }}" class="berita-read-more">
+                                        {{ __('ui.potential_detail') }} <i class="fa fa-arrow-right"></i>
+                                    </a>
+                                </div>
+                            </article>
+                        @endforeach
+                    </div>
+                @else
+                    <div
+                        style="text-align:center;padding:40px;background:#fff;border-radius:var(--radius-lg);box-shadow:var(--shadow-sm);">
+                        <i class="fa fa-gem" style="font-size:48px;color:var(--gray-300);margin-bottom:16px;"></i>
+                        <p style="color:var(--gray-500);">{{ __('ui.informasi_no_potential') }}</p>
+                    </div>
+                @endif
             </section>
 
             <!-- ==================== DOKUMEN INFORMASI PUBLIK ==================== -->

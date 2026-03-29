@@ -55,6 +55,17 @@
                         </li>
                     </ul>
                 </li>
+                @if (isset($navPages) && $navPages->count())
+                    <li class="has-dropdown {{ request()->routeIs('halaman.*') ? 'active' : '' }}">
+                        <a href="#">{{ __('ui.nav_pages') }} <i class="fa fa-chevron-down fa-xs"></i></a>
+                        <ul class="dropdown">
+                            @foreach ($navPages as $navPage)
+                                <li><a href="{{ route('halaman.show', $navPage->slug) }}">{{ $navPage->title }}</a>
+                                </li>
+                            @endforeach
+                        </ul>
+                    </li>
+                @endif
                 <li class="{{ request()->routeIs('pengaduan*') ? 'active' : '' }}">
                     <a href="{{ route('pengaduan') }}"><i class="fa fa-bullhorn"></i>
                         {{ __('ui.nav_complaints') }}</a>

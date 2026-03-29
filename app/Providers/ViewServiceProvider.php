@@ -8,6 +8,7 @@ use App\Models\Setting;
 use App\Models\Complaint;
 use App\Models\PpidRequest;
 use App\Models\Contact;
+use App\Models\Page;
 
 class ViewServiceProvider extends ServiceProvider
 {
@@ -46,6 +47,11 @@ class ViewServiceProvider extends ServiceProvider
             }
 
             $view->with('settings', $settings);
+        });
+
+        // Share published pages with frontend layout
+        View::composer('layouts.app', function ($view) {
+            $view->with('navPages', Page::published()->ordered()->get());
         });
 
         // Share unread counts with admin layout

@@ -47,7 +47,7 @@
         <div class="mb-3">
             <div class="form-check form-switch">
                 <input type="checkbox" name="is_active" class="form-check-input" value="1" id="is_active"
-                    {{ old('is_active', $page->is_active ?? true) ? 'checked' : '' }}>
+                    {{ old('is_active', $page->is_published ?? true) ? 'checked' : '' }}>
                 <label class="form-check-label" for="is_active">Aktif</label>
             </div>
         </div>

@@ -21,8 +21,15 @@
         </div>
         <div class="mb-3">
             <label class="form-label">Kategori</label>
-            <input type="text" name="category" class="form-control @error('category') is-invalid @enderror"
-                value="{{ old('category', $infographic->category ?? '') }}" placeholder="Contoh: Kesehatan, Pendidikan">
+            <select name="information_category_id"
+                class="form-select @error('information_category_id') is-invalid @enderror">
+                <option value="">-- Pilih Kategori --</option>
+                @foreach ($categories as $cat)
+                    <option value="{{ $cat->id }}"
+                        {{ old('information_category_id', $infographic->information_category_id ?? '') == $cat->id ? 'selected' : '' }}>
+                        {{ $cat->name }}</option>
+                @endforeach
+            </select>
         </div>
     </div>
     <div class="col-md-4">
@@ -45,9 +52,9 @@
         </div>
         <div class="mb-3">
             <div class="form-check form-switch">
-                <input type="checkbox" name="is_active" class="form-check-input" value="1" id="is_active"
-                    {{ old('is_active', $infographic->is_active ?? true) ? 'checked' : '' }}>
-                <label class="form-check-label" for="is_active">Aktif</label>
+                <input type="checkbox" name="is_published" class="form-check-input" value="1" id="is_published"
+                    {{ old('is_published', $infographic->is_published ?? true) ? 'checked' : '' }}>
+                <label class="form-check-label" for="is_published">Aktif</label>
             </div>
         </div>
     </div>

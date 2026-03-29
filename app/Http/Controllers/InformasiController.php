@@ -16,8 +16,8 @@ class InformasiController extends Controller
     {
         $agendas = Agenda::published()->orderBy('event_date', 'desc')->take(5)->get();
         $achievements = Achievement::published()->get();
-        $infographics = Infographic::published()->get();
-        $potentials = Potential::published()->get();
+        $infographics = Infographic::published()->with('informationCategory')->get();
+        $potentials = Potential::published()->with('informationCategory')->get();
         $lurah = Official::where('level', 'lurah')->active()->first();
         $ppidDocuments = PpidDocument::published()->ordered()->with('category')->get();
         $periodicInformations = PeriodicInformation::published()->ordered()->get();

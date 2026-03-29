@@ -16,6 +16,8 @@ class Potential extends Model
         'image',
         'icon',
         'category',
+        'information_category_id',
+        'location',
         'order',
         'is_published'
     ];
@@ -23,6 +25,11 @@ class Potential extends Model
     protected $casts = [
         'is_published' => 'boolean',
     ];
+
+    public function informationCategory()
+    {
+        return $this->belongsTo(InformationCategory::class);
+    }
 
     public function scopePublished($query)
     {

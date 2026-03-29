@@ -22,9 +22,15 @@
         <div class="row">
             <div class="col-md-6 mb-3">
                 <label class="form-label">Kategori</label>
-                <input type="text" name="category" class="form-control @error('category') is-invalid @enderror"
-                    value="{{ old('category', $potential->category ?? '') }}"
-                    placeholder="Contoh: Wisata, Kuliner, UMKM">
+                <select name="information_category_id"
+                    class="form-select @error('information_category_id') is-invalid @enderror">
+                    <option value="">-- Pilih Kategori --</option>
+                    @foreach ($categories as $cat)
+                        <option value="{{ $cat->id }}"
+                            {{ old('information_category_id', $potential->information_category_id ?? '') == $cat->id ? 'selected' : '' }}>
+                            {{ $cat->name }}</option>
+                    @endforeach
+                </select>
             </div>
             <div class="col-md-6 mb-3">
                 <label class="form-label">Lokasi</label>
@@ -50,9 +56,9 @@
         </div>
         <div class="mb-3">
             <div class="form-check form-switch">
-                <input type="checkbox" name="is_active" class="form-check-input" value="1" id="is_active"
-                    {{ old('is_active', $potential->is_active ?? true) ? 'checked' : '' }}>
-                <label class="form-check-label" for="is_active">Aktif</label>
+                <input type="checkbox" name="is_published" class="form-check-input" value="1" id="is_published"
+                    {{ old('is_published', $potential->is_published ?? true) ? 'checked' : '' }}>
+                <label class="form-check-label" for="is_published">Aktif</label>
             </div>
         </div>
     </div>

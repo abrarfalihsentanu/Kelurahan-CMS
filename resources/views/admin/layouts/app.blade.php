@@ -399,6 +399,10 @@
                     class="{{ request()->routeIs('admin.achievements.*') ? 'active' : '' }}">
                     <i class="fas fa-trophy"></i> Prestasi
                 </a>
+                <a href="{{ route('admin.information-categories.index') }}"
+                    class="{{ request()->routeIs('admin.information-categories.*') ? 'active' : '' }}">
+                    <i class="fas fa-tags"></i> Kategori Informasi
+                </a>
                 <a href="{{ route('admin.infographics.index') }}"
                     class="{{ request()->routeIs('admin.infographics.*') ? 'active' : '' }}">
                     <i class="fas fa-chart-pie"></i> Infografis

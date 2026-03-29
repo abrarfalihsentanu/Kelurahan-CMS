@@ -13,7 +13,9 @@ return new class extends Migration
             $table->string('title');
             $table->text('description')->nullable();
             $table->string('image')->nullable();
-            $table->string('category')->nullable(); // Kependudukan, Lingkungan, Sosial
+            $table->string('category')->nullable();
+            $table->foreignId('information_category_id')->nullable()
+                ->constrained('information_categories')->nullOnDelete();
             $table->string('source')->nullable();
             $table->string('year')->nullable();
             $table->integer('order')->default(0);

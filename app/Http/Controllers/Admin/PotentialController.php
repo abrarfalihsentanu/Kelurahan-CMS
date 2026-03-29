@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\InformationCategory;
 use App\Models\Potential;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -11,13 +12,14 @@ class PotentialController extends Controller
 {
     public function index()
     {
-        $potentials = Potential::ordered()->get();
+        $potentials = Potential::with('informationCategory')->ordered()->get();
         return view('admin.potentials.index', compact('potentials'));
     }
 
     public function create()
     {
-        return view('admin.potentials.create');
+        $categories = InformationCategory::forPotential()->active()->ordered()->get();
+        return view('admin.potentials.create', compact('categories'));
     }
 
     public function store(Request $request)
@@ -26,17 +28,22 @@ class PotentialController extends Controller
             'title' => 'required|max:255',
             'description' => 'nullable',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
-            'category' => 'nullable|max:100',
+            'information_category_id' => 'nullable|exists:information_categories,id',
             'location' => 'nullable|max:255',
             'order' => 'nullable|integer',
-            'is_active' => 'boolean',
+            'is_published' => 'boolean',
         ]);
 
         if ($request->hasFile('image')) {
             $validated['image'] = $request->file('image')->store('potentials', 'public');
         }
 
-        $validated['is_active'] = $request->boolean('is_active');
+        // Sync text category field for backward compatibility
+        if (!empty($validated['information_category_id'])) {
+            $validated['category'] = InformationCategory::find($validated['information_category_id'])?->name;
+        }
+
+        $validated['is_published'] = $request->boolean('is_published');
         Potential::create($validated);
 
         return redirect()->route('admin.potentials.index')
@@ -45,7 +52,8 @@ class PotentialController extends Controller
 
     public function edit(Potential $potential)
     {
-        return view('admin.potentials.edit', compact('potential'));
+        $categories = InformationCategory::forPotential()->active()->ordered()->get();
+        return view('admin.potentials.edit', compact('potential', 'categories'));
     }
 
     public function update(Request $request, Potential $potential)
@@ -54,10 +62,10 @@ class PotentialController extends Controller
             'title' => 'required|max:255',
             'description' => 'nullable',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
-            'category' => 'nullable|max:100',
+            'information_category_id' => 'nullable|exists:information_categories,id',
             'location' => 'nullable|max:255',
             'order' => 'nullable|integer',
-            'is_active' => 'boolean',
+            'is_published' => 'boolean',
         ]);
 
         if ($request->hasFile('image')) {
@@ -67,7 +75,14 @@ class PotentialController extends Controller
             $validated['image'] = $request->file('image')->store('potentials', 'public');
         }
 
-        $validated['is_active'] = $request->boolean('is_active');
+        // Sync text category field for backward compatibility
+        if (!empty($validated['information_category_id'])) {
+            $validated['category'] = InformationCategory::find($validated['information_category_id'])?->name;
+        } else {
+            $validated['category'] = null;
+        }
+
+        $validated['is_published'] = $request->boolean('is_published');
         $potential->update($validated);
 
         return redirect()->route('admin.potentials.index')

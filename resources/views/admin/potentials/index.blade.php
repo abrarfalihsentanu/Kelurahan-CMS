@@ -34,11 +34,11 @@
                                 @endif
                             </td>
                             <td>{{ $potential->title }}</td>
-                            <td>{{ $potential->category ?? '-' }}</td>
+                            <td>{{ $potential->informationCategory->name ?? '-' }}</td>
                             <td>{{ Str::limit($potential->location, 30) ?? '-' }}</td>
                             <td>{{ $potential->order }}</td>
                             <td>
-                                @if ($potential->is_active)
+                                @if ($potential->is_published)
                                     <span class="badge bg-success">Aktif</span>
                                 @else
                                     <span class="badge bg-secondary">Nonaktif</span>

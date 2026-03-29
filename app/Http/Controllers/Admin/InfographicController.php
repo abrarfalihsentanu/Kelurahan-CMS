@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Infographic;
+use App\Models\InformationCategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -11,13 +12,14 @@ class InfographicController extends Controller
 {
     public function index()
     {
-        $infographics = Infographic::ordered()->get();
+        $infographics = Infographic::with('informationCategory')->ordered()->get();
         return view('admin.infographics.index', compact('infographics'));
     }
 
     public function create()
     {
-        return view('admin.infographics.create');
+        $categories = InformationCategory::forInfographic()->active()->ordered()->get();
+        return view('admin.infographics.create', compact('categories'));
     }
 
     public function store(Request $request)
@@ -26,16 +28,21 @@ class InfographicController extends Controller
             'title' => 'required|max:255',
             'description' => 'nullable',
             'image' => 'required|image|mimes:jpeg,png,jpg,webp|max:4096',
-            'category' => 'nullable|max:100',
+            'information_category_id' => 'nullable|exists:information_categories,id',
             'order' => 'nullable|integer',
-            'is_active' => 'boolean',
+            'is_published' => 'boolean',
         ]);
 
         if ($request->hasFile('image')) {
             $validated['image'] = $request->file('image')->store('infographics', 'public');
         }
 
-        $validated['is_active'] = $request->boolean('is_active');
+        // Sync text category field for backward compatibility
+        if (!empty($validated['information_category_id'])) {
+            $validated['category'] = InformationCategory::find($validated['information_category_id'])?->name;
+        }
+
+        $validated['is_published'] = $request->boolean('is_published');
         Infographic::create($validated);
 
         return redirect()->route('admin.infographics.index')
@@ -44,7 +51,8 @@ class InfographicController extends Controller
 
     public function edit(Infographic $infographic)
     {
-        return view('admin.infographics.edit', compact('infographic'));
+        $categories = InformationCategory::forInfographic()->active()->ordered()->get();
+        return view('admin.infographics.edit', compact('infographic', 'categories'));
     }
 
     public function update(Request $request, Infographic $infographic)
@@ -53,9 +61,9 @@ class InfographicController extends Controller
             'title' => 'required|max:255',
             'description' => 'nullable',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:4096',
-            'category' => 'nullable|max:100',
+            'information_category_id' => 'nullable|exists:information_categories,id',
             'order' => 'nullable|integer',
-            'is_active' => 'boolean',
+            'is_published' => 'boolean',
         ]);
 
         if ($request->hasFile('image')) {
@@ -65,7 +73,14 @@ class InfographicController extends Controller
             $validated['image'] = $request->file('image')->store('infographics', 'public');
         }
 
-        $validated['is_active'] = $request->boolean('is_active');
+        // Sync text category field for backward compatibility
+        if (!empty($validated['information_category_id'])) {
+            $validated['category'] = InformationCategory::find($validated['information_category_id'])?->name;
+        } else {
+            $validated['category'] = null;
+        }
+
+        $validated['is_published'] = $request->boolean('is_published');
         $infographic->update($validated);
 
         return redirect()->route('admin.infographics.index')

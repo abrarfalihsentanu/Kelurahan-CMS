@@ -5,11 +5,14 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PerangkatController;
 use App\Http\Controllers\LayananController;
 use App\Http\Controllers\InformasiController;
+use App\Http\Controllers\InfografisController;
+use App\Http\Controllers\PotensiController;
 use App\Http\Controllers\BeritaController;
 use App\Http\Controllers\PengaduanController;
 use App\Http\Controllers\PpidController;
 use App\Http\Controllers\KontakController;
 use App\Http\Controllers\AgendaController as FrontendAgendaController;
+use App\Http\Controllers\HalamanController;
 use App\Http\Controllers\Auth\LoginController;
 
 // Admin Controllers
@@ -27,6 +30,7 @@ use App\Http\Controllers\Admin\ServiceHourController;
 use App\Http\Controllers\Admin\AgendaController;
 use App\Http\Controllers\Admin\AchievementController;
 use App\Http\Controllers\Admin\InfographicController;
+use App\Http\Controllers\Admin\InformationCategoryController;
 use App\Http\Controllers\Admin\PotentialController;
 use App\Http\Controllers\Admin\ComplaintCategoryController;
 use App\Http\Controllers\Admin\ComplaintController;
@@ -60,6 +64,14 @@ Route::get('/perangkat', [PerangkatController::class, 'index'])->name('perangkat
 Route::get('/layanan', [LayananController::class, 'index'])->name('layanan');
 Route::get('/informasi', [InformasiController::class, 'index'])->name('informasi');
 
+// Infografis
+Route::get('/infografis', [InfografisController::class, 'index'])->name('infografis');
+Route::get('/infografis/{infographic}', [InfografisController::class, 'show'])->name('infografis.show');
+
+// Potensi
+Route::get('/potensi', [PotensiController::class, 'index'])->name('potensi');
+Route::get('/potensi/{potential}', [PotensiController::class, 'show'])->name('potensi.show');
+
 // Agenda
 Route::get('/agenda', [FrontendAgendaController::class, 'index'])->name('agenda');
 
@@ -83,6 +95,9 @@ Route::get('/ppid/download/{document}', [PpidController::class, 'download'])->na
 Route::get('/kontak', [KontakController::class, 'index'])->name('kontak');
 Route::post('/kontak', [KontakController::class, 'store'])->name('kontak.store');
 Route::get('/kontak/tracking', [KontakController::class, 'tracking'])->name('kontak.tracking');
+
+// Halaman Statis
+Route::get('/halaman/{slug}', [HalamanController::class, 'show'])->name('halaman.show');
 
 // Authentication Routes
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
@@ -111,6 +126,7 @@ Route::prefix('admin')->middleware('admin')->name('admin.')->group(function () {
     Route::resource('service-hours', ServiceHourController::class);
     Route::resource('agendas', AgendaController::class);
     Route::resource('achievements', AchievementController::class);
+    Route::resource('information-categories', InformationCategoryController::class);
     Route::resource('infographics', InfographicController::class);
     Route::resource('potentials', PotentialController::class);
     Route::resource('complaint-categories', ComplaintCategoryController::class);

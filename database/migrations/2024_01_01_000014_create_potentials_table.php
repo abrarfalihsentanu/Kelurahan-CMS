@@ -15,7 +15,10 @@ return new class extends Migration
             $table->longText('content')->nullable();
             $table->string('image')->nullable();
             $table->string('icon')->nullable();
-            $table->string('category')->nullable(); // Ekonomi, Sosial, Budaya
+            $table->string('category')->nullable();
+            $table->foreignId('information_category_id')->nullable()
+                ->constrained('information_categories')->nullOnDelete();
+            $table->string('location')->nullable();
             $table->integer('order')->default(0);
             $table->boolean('is_published')->default(true);
             $table->timestamps();

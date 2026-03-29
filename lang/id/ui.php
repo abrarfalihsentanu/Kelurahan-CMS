@@ -46,6 +46,7 @@ return [
     'nav_complaints' => 'Pengaduan',
     'nav_ppid' => 'PPID',
     'nav_contact' => 'Kontak',
+    'nav_pages' => 'Penting',
 
     // ===== FOOTER =====
     'footer_services' => 'Layanan',
@@ -217,9 +218,21 @@ return [
     'informasi_infographic_badge' => 'Visual',
     'informasi_infographic_title' => 'Infografis',
     'informasi_no_infographic' => 'Belum ada infografis.',
+    'infographic_page_title' => 'Infografis',
+    'infographic_page_desc' => 'Kumpulan data visual dan infografis Kelurahan Petamburan.',
+    'infographic_detail' => 'Lihat Detail',
+    'infographic_back' => 'Kembali ke Infografis',
+    'infographic_related' => 'Infografis Terkait',
+    'infographic_categories' => 'Kategori Infografis',
     'informasi_potential_badge' => 'Unggulan',
     'informasi_potential_title' => 'Potensi Kelurahan',
     'informasi_no_potential' => 'Belum ada data potensi.',
+    'potential_page_title' => 'Potensi Kelurahan',
+    'potential_page_desc' => 'Potensi unggulan dan keunggulan Kelurahan Petamburan.',
+    'potential_detail' => 'Lihat Detail',
+    'potential_back' => 'Kembali ke Potensi',
+    'potential_related' => 'Potensi Terkait',
+    'potential_categories' => 'Kategori Potensi',
 
     // Dokumen Informasi Publik
     'informasi_pubdoc_badge' => 'Dokumen',

@@ -14,6 +14,7 @@ class Infographic extends Model
         'description',
         'image',
         'category',
+        'information_category_id',
         'source',
         'year',
         'order',
@@ -23,6 +24,11 @@ class Infographic extends Model
     protected $casts = [
         'is_published' => 'boolean',
     ];
+
+    public function informationCategory()
+    {
+        return $this->belongsTo(InformationCategory::class);
+    }
 
     public function scopePublished($query)
     {

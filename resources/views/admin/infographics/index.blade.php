@@ -33,10 +33,10 @@
                                 @endif
                             </td>
                             <td>{{ $infographic->title }}</td>
-                            <td>{{ $infographic->category ?? '-' }}</td>
+                            <td>{{ $infographic->informationCategory->name ?? '-' }}</td>
                             <td>{{ $infographic->order }}</td>
                             <td>
-                                @if ($infographic->is_active)
+                                @if ($infographic->is_published)
                                     <span class="badge bg-success">Aktif</span>
                                 @else
                                     <span class="badge bg-secondary">Nonaktif</span>
