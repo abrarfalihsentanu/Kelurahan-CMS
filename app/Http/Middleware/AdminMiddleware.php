@@ -18,6 +18,12 @@ class AdminMiddleware
             return redirect()->route('login')->with('error', 'Silakan login terlebih dahulu.');
         }
 
+        // Check if user is admin
+        if (Auth::user()->is_admin !== true) {
+            Auth::logout();
+            return redirect()->route('login')->with('error', 'Anda tidak memiliki akses ke halaman admin. Hubungi administrator.');
+        }
+
         if (Auth::user()->is_active === false) {
             Auth::logout();
             $request->session()->invalidate();

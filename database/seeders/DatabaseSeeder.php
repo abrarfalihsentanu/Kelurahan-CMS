@@ -23,12 +23,16 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
-        // Create admin user
-        User::create([
-            'name' => 'Administrator',
-            'email' => 'admin@kelurahan-petamburan.go.id',
-            'password' => Hash::make('password'),
-        ]);
+        // Create or update admin user
+        User::updateOrCreate(
+            ['email' => 'admin@kelurahan-petamburan.go.id'],
+            [
+                'name' => 'Administrator',
+                'password' => Hash::make('password'),
+                'is_active' => true,
+                'is_admin' => true,
+            ]
+        );
 
         // Settings
         $this->seedSettings();
