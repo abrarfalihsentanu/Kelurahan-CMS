@@ -19,8 +19,8 @@ class InformasiController extends Controller
         $infographics = Infographic::published()->with('informationCategory')->get();
         $potentials = Potential::published()->with('informationCategory')->get();
         $lurah = Official::where('level', 'lurah')->active()->first();
-        $ppidDocuments = PpidDocument::published()->ordered()->with('category')->get();
-        $periodicInformations = PeriodicInformation::published()->ordered()->get();
+        $ppidDocuments = PpidDocument::published()->orderBy('order')->with('category')->get();
+        $periodicInformations = PeriodicInformation::published()->orderBy('order')->get();
 
         return view('informasi', compact('agendas', 'achievements', 'infographics', 'potentials', 'lurah', 'ppidDocuments', 'periodicInformations'));
     }

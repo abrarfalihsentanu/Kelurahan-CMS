@@ -56,7 +56,7 @@
         @if ($complaint->attachments && count($complaint->attachments) > 0)
             <div class="mb-3">
                 @foreach ($complaint->attachments as $i => $attachment)
-                    <a href="{{ Storage::url($attachment) }}" target="_blank"
+                    <a href="{{ asset('storage/' . $attachment) }}" target="_blank"
                         class="btn btn-outline-primary btn-sm me-1 mb-1">
                         <i class="fas fa-download me-1"></i>Lampiran {{ $i + 1 }}
                     </a>

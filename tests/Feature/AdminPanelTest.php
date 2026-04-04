@@ -8,12 +8,20 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class AdminPanelTest extends TestCase
 {
+    use RefreshDatabase;
+
     private $user;
 
     protected function setUp(): void
     {
         parent::setUp();
-        $this->user = User::first();
+        $this->user = User::create([
+            'name' => 'Admin User',
+            'email' => 'admin@example.com',
+            'password' => bcrypt('password'),
+            'is_admin' => true,
+            'is_active' => true,
+        ]);
     }
 
     public function test_login_page_loads(): void

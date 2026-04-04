@@ -9,7 +9,7 @@
         <div class="card-body">
             <form action="{{ route('admin.ppid-categories.update', $category) }}" method="POST">
                 @csrf @method('PUT')
-                @include('admin.ppid-categories._form')
+                @include('admin.ppid-categories._form', ['category' => $ppidCategory])
                 <div class="mt-4">
                     <button type="submit" class="btn btn-primary"><i class="fas fa-save me-1"></i>Simpan</button>
                     <a href="{{ route('admin.ppid-categories.index') }}" class="btn btn-secondary">Batal</a>

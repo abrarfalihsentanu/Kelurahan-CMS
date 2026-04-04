@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Complaint;
 use App\Models\ComplaintCategory;
+use App\Helpers\StorageHelper;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class PengaduanController extends Controller
 {
@@ -12,6 +14,15 @@ class PengaduanController extends Controller
     {
         $categories = ComplaintCategory::all();
         $complaints = Complaint::with('category')->latest()->paginate(10);
+
+        // Convert attachment paths to URLs
+        $complaints->each(function ($complaint) {
+            if ($complaint->attachments && is_array($complaint->attachments)) {
+                $complaint->attachment_urls = array_map(fn($path) => Storage::url($path), $complaint->attachments);
+            }
+            return $complaint;
+        });
+
         return view('pengaduan', compact('categories', 'complaints'));
     }
 
@@ -36,7 +47,10 @@ class PengaduanController extends Controller
         $attachmentPaths = [];
         if ($request->hasFile('attachments')) {
             foreach ($request->file('attachments') as $file) {
-                $attachmentPaths[] = $file->store('complaints', 'public');
+                $path = $file->store('complaints', 'public');
+                $attachmentPaths[] = $path;
+                // Auto-copy to public_html/storage for shared hosting
+                StorageHelper::copyToPublic($path, 'complaints');
             }
         }
 
@@ -55,6 +69,11 @@ class PengaduanController extends Controller
 
         if ($ticket) {
             $complaint = Complaint::with('category')->where('ticket_number', $ticket)->first();
+
+            // Convert attachment paths to URLs
+            if ($complaint && $complaint->attachments && is_array($complaint->attachments)) {
+                $complaint->attachment_urls = array_map(fn($path) => Storage::url($path), $complaint->attachments);
+            }
         }
 
         $categories = ComplaintCategory::all();

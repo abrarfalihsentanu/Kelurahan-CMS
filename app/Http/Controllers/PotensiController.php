@@ -20,7 +20,7 @@ class PotensiController extends Controller
         }
 
         $potentials = $query->paginate(12);
-        $categories = InformationCategory::forPotential()->active()->ordered()->get();
+        $categories = InformationCategory::forPotential()->active()->orderBy('order')->get();
         $lurah = Official::where('level', 'lurah')->active()->first();
 
         return view('potensi.index', compact('potentials', 'categories', 'lurah'));

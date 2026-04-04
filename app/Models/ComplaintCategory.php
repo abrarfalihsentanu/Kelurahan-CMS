@@ -9,7 +9,7 @@ class ComplaintCategory extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'slug', 'icon'];
+    protected $fillable = ['name', 'slug', 'icon', 'description', 'order', 'is_active'];
 
     public function complaints()
     {
@@ -18,6 +18,11 @@ class ComplaintCategory extends Model
 
     public function scopeOrdered($query)
     {
-        return $query->orderBy('name');
+        return $query->orderBy('order');
+    }
+
+    public function scopeActive($query)
+    {
+        return $query->where('is_active', true);
     }
 }

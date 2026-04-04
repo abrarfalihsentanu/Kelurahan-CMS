@@ -36,7 +36,7 @@ class PeriodicInformation extends Model
 
     public function scopeOrdered($query)
     {
-        return $query->orderBy('order')->orderBy('created_at', 'desc');
+        return $query->orderBy('order');
     }
 
     public function incrementDownloads()

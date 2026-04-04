@@ -10,7 +10,7 @@ class ServiceHourController extends Controller
 {
     public function index()
     {
-        $serviceHours = ServiceHour::ordered()->get();
+        $serviceHours = ServiceHour::orderBy('day_order')->get();
         return view('admin.service-hours.index', compact('serviceHours'));
     }
 

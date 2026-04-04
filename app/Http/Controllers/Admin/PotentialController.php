@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\InformationCategory;
 use App\Models\Potential;
+use App\Helpers\StorageHelper;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -12,13 +13,13 @@ class PotentialController extends Controller
 {
     public function index()
     {
-        $potentials = Potential::with('informationCategory')->ordered()->get();
+        $potentials = Potential::with('informationCategory')->orderBy('order')->get();
         return view('admin.potentials.index', compact('potentials'));
     }
 
     public function create()
     {
-        $categories = InformationCategory::forPotential()->active()->ordered()->get();
+        $categories = InformationCategory::forPotential()->active()->orderBy('order')->get();
         return view('admin.potentials.create', compact('categories'));
     }
 
@@ -36,6 +37,8 @@ class PotentialController extends Controller
 
         if ($request->hasFile('image')) {
             $validated['image'] = $request->file('image')->store('potentials', 'public');
+            // Auto-copy to public_html/storage for shared hosting
+            StorageHelper::copyToPublic($validated['image'], 'potentials');
         }
 
         // Sync text category field for backward compatibility
@@ -52,7 +55,7 @@ class PotentialController extends Controller
 
     public function edit(Potential $potential)
     {
-        $categories = InformationCategory::forPotential()->active()->ordered()->get();
+        $categories = InformationCategory::forPotential()->active()->orderBy('order')->get();
         return view('admin.potentials.edit', compact('potential', 'categories'));
     }
 
@@ -70,9 +73,11 @@ class PotentialController extends Controller
 
         if ($request->hasFile('image')) {
             if ($potential->image) {
-                Storage::disk('public')->delete($potential->image);
+                StorageHelper::deleteFromBoth($potential->image);
             }
             $validated['image'] = $request->file('image')->store('potentials', 'public');
+            // Auto-copy to public_html/storage for shared hosting
+            StorageHelper::copyToPublic($validated['image'], 'potentials');
         }
 
         // Sync text category field for backward compatibility
@@ -92,7 +97,7 @@ class PotentialController extends Controller
     public function destroy(Potential $potential)
     {
         if ($potential->image) {
-            Storage::disk('public')->delete($potential->image);
+            StorageHelper::deleteFromBoth($potential->image);
         }
         $potential->delete();
 

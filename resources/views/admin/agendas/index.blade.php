@@ -17,7 +17,8 @@
                         <th>Tanggal</th>
                         <th>Waktu</th>
                         <th>Lokasi</th>
-                        <th width="80">Status</th>
+                        <th width="120">Status Agenda</th>
+                        <th width="80">Publikasi</th>
                         <th width="120">Aksi</th>
                     </tr>
                 </thead>
@@ -25,11 +26,28 @@
                     @foreach ($agendas as $agenda)
                         <tr>
                             <td>{{ $agenda->title }}</td>
-                            <td>{{ $agenda->date ? \Carbon\Carbon::parse($agenda->date)->format('d M Y') : '-' }}</td>
-                            <td>{{ $agenda->time ?? '-' }}</td>
+                            <td>{{ $agenda->event_date ? \Carbon\Carbon::parse($agenda->event_date)->format('d M Y') : '-' }}
+                            </td>
+                            <td>{{ $agenda->start_time ? \Carbon\Carbon::parse($agenda->start_time)->format('H:i') . ' - ' . \Carbon\Carbon::parse($agenda->end_time)->format('H:i') : '-' }}
+                            </td>
                             <td>{{ Str::limit($agenda->location, 30) ?? '-' }}</td>
                             <td>
-                                @if ($agenda->is_active)
+                                @php
+                                    $statusLabels = [
+                                        'upcoming' => ['label' => 'Akan Datang', 'class' => 'primary'],
+                                        'ongoing' => ['label' => 'Sedang Berlangsung', 'class' => 'warning'],
+                                        'completed' => ['label' => 'Selesai', 'class' => 'secondary'],
+                                    ];
+                                    $status = $agenda->status ?? 'upcoming';
+                                    $statusInfo = $statusLabels[$status] ?? [
+                                        'label' => 'Tidak Diketahui',
+                                        'class' => 'danger',
+                                    ];
+                                @endphp
+                                <span class="badge bg-{{ $statusInfo['class'] }}">{{ $statusInfo['label'] }}</span>
+                            </td>
+                            <td>
+                                @if ($agenda->is_published)
                                     <span class="badge bg-success">Aktif</span>
                                 @else
                                     <span class="badge bg-secondary">Nonaktif</span>

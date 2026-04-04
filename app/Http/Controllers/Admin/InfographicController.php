@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Infographic;
 use App\Models\InformationCategory;
+use App\Helpers\StorageHelper;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -12,13 +13,13 @@ class InfographicController extends Controller
 {
     public function index()
     {
-        $infographics = Infographic::with('informationCategory')->ordered()->get();
+        $infographics = Infographic::with('informationCategory')->orderBy('order')->get();
         return view('admin.infographics.index', compact('infographics'));
     }
 
     public function create()
     {
-        $categories = InformationCategory::forInfographic()->active()->ordered()->get();
+        $categories = InformationCategory::forInfographic()->active()->orderBy('order')->get();
         return view('admin.infographics.create', compact('categories'));
     }
 
@@ -35,6 +36,8 @@ class InfographicController extends Controller
 
         if ($request->hasFile('image')) {
             $validated['image'] = $request->file('image')->store('infographics', 'public');
+            // Auto-copy to public_html/storage for shared hosting
+            StorageHelper::copyToPublic($validated['image'], 'infographics');
         }
 
         // Sync text category field for backward compatibility
@@ -51,7 +54,7 @@ class InfographicController extends Controller
 
     public function edit(Infographic $infographic)
     {
-        $categories = InformationCategory::forInfographic()->active()->ordered()->get();
+        $categories = InformationCategory::forInfographic()->active()->orderBy('order')->get();
         return view('admin.infographics.edit', compact('infographic', 'categories'));
     }
 
@@ -68,9 +71,11 @@ class InfographicController extends Controller
 
         if ($request->hasFile('image')) {
             if ($infographic->image) {
-                Storage::disk('public')->delete($infographic->image);
+                StorageHelper::deleteFromBoth($infographic->image);
             }
             $validated['image'] = $request->file('image')->store('infographics', 'public');
+            // Auto-copy to public_html/storage for shared hosting
+            StorageHelper::copyToPublic($validated['image'], 'infographics');
         }
 
         // Sync text category field for backward compatibility
@@ -90,7 +95,7 @@ class InfographicController extends Controller
     public function destroy(Infographic $infographic)
     {
         if ($infographic->image) {
-            Storage::disk('public')->delete($infographic->image);
+            StorageHelper::deleteFromBoth($infographic->image);
         }
         $infographic->delete();
 

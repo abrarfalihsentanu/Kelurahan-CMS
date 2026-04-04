@@ -11,7 +11,7 @@ class PpidRequestController extends Controller
 {
     public function index()
     {
-        $requests = PpidRequest::latest()->get();
+        $requests = PpidRequest::latest()->paginate(25);
         return view('admin.ppid-requests.index', compact('requests'));
     }
 

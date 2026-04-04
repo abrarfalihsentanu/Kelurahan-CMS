@@ -43,7 +43,7 @@
             <small class="text-muted">PDF, DOC, DOCX, XLS, XLSX (Max: 10MB)</small>
             @if (isset($document) && $document->file_path)
                 <div class="mt-2">
-                    <a href="{{ Storage::url($document->file_path) }}" target="_blank"
+                    <a href="{{ asset('storage/' . $document->file_path) }}" target="_blank"
                         class="btn btn-sm btn-outline-primary">
                         <i class="fas fa-download me-1"></i>{{ strtoupper($document->file_type) }}
                         ({{ number_format($document->file_size / 1024, 0) }} KB)

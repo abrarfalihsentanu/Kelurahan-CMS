@@ -19,9 +19,9 @@ class HomeController extends Controller
         $statistics = Statistic::active()->get();
         $news = News::published()->with('category')->take(4)->get();
         $services = Service::active()->take(6)->get();
-        $agendas = Agenda::published()->upcoming()->take(4)->get();
+        $agendas = Agenda::published()->upcoming()->take(3)->get();
         $lurah = Official::where('level', 'lurah')->active()->first();
-        $serviceHours = ServiceHour::ordered()->get();
+        $serviceHours = ServiceHour::orderBy('day_order')->get();
         $galleries = Gallery::where('is_active', true)->orderBy('order')->take(8)->get();
 
         return view('home', compact(

@@ -59,7 +59,7 @@
             <input type="file" name="photo" class="form-control @error('photo') is-invalid @enderror"
                 accept="image/*">
             @if (isset($official) && $official->photo)
-                <img src="{{ Storage::url($official->photo) }}" alt="" class="mt-2 rounded"
+                <img src="{{ asset('storage/' . $official->photo) }}" alt="" class="mt-2 rounded"
                     style="max-width:100%;max-height:150px">
             @endif
         </div>

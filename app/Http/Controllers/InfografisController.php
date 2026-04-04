@@ -20,7 +20,7 @@ class InfografisController extends Controller
         }
 
         $infographics = $query->paginate(12);
-        $categories = InformationCategory::forInfographic()->active()->ordered()->get();
+        $categories = InformationCategory::forInfographic()->active()->orderBy('order')->get();
         $lurah = Official::where('level', 'lurah')->active()->first();
 
         return view('infografis.index', compact('infographics', 'categories', 'lurah'));

@@ -9,7 +9,7 @@ class NewsCategory extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'slug', 'color'];
+    protected $fillable = ['name', 'slug', 'icon', 'description', 'order', 'is_active'];
 
     public function news()
     {
@@ -18,11 +18,11 @@ class NewsCategory extends Model
 
     public function scopeOrdered($query)
     {
-        return $query->orderBy('name');
+        return $query->orderBy('order');
     }
 
     public function scopeActive($query)
     {
-        return $query;
+        return $query->where('is_active', true);
     }
 }

@@ -13,6 +13,7 @@
             <table class="table datatable">
                 <thead>
                     <tr>
+                        <th width="60">Icon</th>
                         <th>Nama</th>
                         <th>Slug</th>
                         <th width="80">Urutan</th>
@@ -23,6 +24,13 @@
                 <tbody>
                     @foreach ($categories as $category)
                         <tr>
+                            <td>
+                                @if ($category->icon)
+                                    <i class="{{ $category->icon }} fa-lg"></i>
+                                @else
+                                    <span class="text-muted">-</span>
+                                @endif
+                            </td>
                             <td>{{ $category->name }}</td>
                             <td><code>{{ $category->slug }}</code></td>
                             <td>{{ $category->order }}</td>

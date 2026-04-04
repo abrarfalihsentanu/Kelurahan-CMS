@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Gallery;
+use App\Helpers\StorageHelper;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -11,7 +12,7 @@ class GalleryController extends Controller
 {
     public function index()
     {
-        $galleries = Gallery::ordered()->get();
+        $galleries = Gallery::orderBy('order')->get();
         return view('admin.galleries.index', compact('galleries'));
     }
 
@@ -37,6 +38,8 @@ class GalleryController extends Controller
 
         if ($request->hasFile('image')) {
             $validated['image'] = $request->file('image')->store('galleries', 'public');
+            // Auto-copy to public_html/storage for shared hosting
+            StorageHelper::copyToPublic($validated['image'], 'galleries');
         } else {
             $validated['image'] = null;
         }
@@ -69,9 +72,11 @@ class GalleryController extends Controller
 
         if ($request->hasFile('image')) {
             if ($gallery->image) {
-                Storage::disk('public')->delete($gallery->image);
+                StorageHelper::deleteFromBoth($gallery->image);
             }
             $validated['image'] = $request->file('image')->store('galleries', 'public');
+            // Auto-copy to public_html/storage for shared hosting
+            StorageHelper::copyToPublic($validated['image'], 'galleries');
         }
 
         $validated['is_active'] = $request->boolean('is_active');
@@ -84,7 +89,7 @@ class GalleryController extends Controller
     public function destroy(Gallery $gallery)
     {
         if ($gallery->image) {
-            Storage::disk('public')->delete($gallery->image);
+            StorageHelper::deleteFromBoth($gallery->image);
         }
         $gallery->delete();
 

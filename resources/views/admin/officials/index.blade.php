@@ -28,8 +28,8 @@
                         <tr>
                             <td>
                                 @if ($official->photo)
-                                    <img src="{{ Storage::url($official->photo) }}" alt="" class="rounded-circle"
-                                        style="width:40px;height:40px;object-fit:cover">
+                                    <img src="{{ asset('storage/' . $official->photo) }}" alt=""
+                                        class="rounded-circle" style="width:40px;height:40px;object-fit:cover">
                                 @else
                                     <span class="text-muted">-</span>
                                 @endif

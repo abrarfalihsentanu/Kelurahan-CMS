@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Achievement;
+use App\Helpers\StorageHelper;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -36,6 +37,8 @@ class AchievementController extends Controller
 
         if ($request->hasFile('image')) {
             $validated['image'] = $request->file('image')->store('achievements', 'public');
+            // Auto-copy to public_html/storage for shared hosting
+            StorageHelper::copyToPublic($validated['image'], 'achievements');
         }
 
         $validated['is_published'] = $request->boolean('is_published');
@@ -66,9 +69,11 @@ class AchievementController extends Controller
 
         if ($request->hasFile('image')) {
             if ($achievement->image) {
-                Storage::disk('public')->delete($achievement->image);
+                StorageHelper::deleteFromBoth($achievement->image);
             }
             $validated['image'] = $request->file('image')->store('achievements', 'public');
+            // Auto-copy to public_html/storage for shared hosting
+            StorageHelper::copyToPublic($validated['image'], 'achievements');
         }
 
         $validated['is_published'] = $request->boolean('is_published');
@@ -81,7 +86,7 @@ class AchievementController extends Controller
     public function destroy(Achievement $achievement)
     {
         if ($achievement->image) {
-            Storage::disk('public')->delete($achievement->image);
+            StorageHelper::deleteFromBoth($achievement->image);
         }
         $achievement->delete();
 

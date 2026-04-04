@@ -13,7 +13,7 @@ class LayananController extends Controller
     {
         $services = Service::active()->with('category')->get();
         $categories = ServiceCategory::with('services')->get();
-        $serviceHours = ServiceHour::ordered()->get();
+        $serviceHours = ServiceHour::orderBy('day_order')->get();
         $lurah = Official::where('level', 'lurah')->first();
 
         return view('layanan', compact('services', 'categories', 'serviceHours', 'lurah'));

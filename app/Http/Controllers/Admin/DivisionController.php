@@ -10,7 +10,7 @@ class DivisionController extends Controller
 {
     public function index()
     {
-        $divisions = Division::withCount('officials')->ordered()->get();
+        $divisions = Division::withCount('officials')->orderBy('order')->get();
         return view('admin.divisions.index', compact('divisions'));
     }
 

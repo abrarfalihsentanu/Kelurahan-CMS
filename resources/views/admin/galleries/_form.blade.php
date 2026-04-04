@@ -46,7 +46,7 @@
             <small class="text-muted" id="image_hint_video" style="display:none">Opsional — digunakan sebagai thumbnail
                 video.</small>
             @if (isset($gallery) && $gallery->image)
-                <img src="{{ Storage::url($gallery->image) }}" alt="" class="mt-2 rounded"
+                <img src="{{ asset('storage/' . $gallery->image) }}" alt="" class="mt-2 rounded"
                     style="max-width:100%;max-height:150px">
             @endif
         </div>

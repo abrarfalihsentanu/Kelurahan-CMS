@@ -9,7 +9,7 @@
         <div class="card-body">
             <form action="{{ route('admin.statistics.update', $statistic) }}" method="POST">
                 @csrf @method('PUT')
-                @include('admin.statistics._form')
+                @include('admin.statistics._form', ['statistic' => $statistic])
                 <div class="mt-4">
                     <button type="submit" class="btn btn-primary"><i class="fas fa-save me-1"></i>Simpan</button>
                     <a href="{{ route('admin.statistics.index') }}" class="btn btn-secondary">Batal</a>

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Official;
 use App\Models\Division;
+use App\Helpers\StorageHelper;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -12,13 +13,13 @@ class OfficialController extends Controller
 {
     public function index()
     {
-        $officials = Official::with('division')->ordered()->get();
+        $officials = Official::with('division')->orderBy('order')->get();
         return view('admin.officials.index', compact('officials'));
     }
 
     public function create()
     {
-        $divisions = Division::active()->ordered()->get();
+        $divisions = Division::active()->orderBy('order')->get();
         return view('admin.officials.create', compact('divisions'));
     }
 
@@ -37,6 +38,8 @@ class OfficialController extends Controller
 
         if ($request->hasFile('photo')) {
             $validated['photo'] = $request->file('photo')->store('officials', 'public');
+            // Auto-copy to public_html/storage for shared hosting
+            StorageHelper::copyToPublic($validated['photo'], 'officials');
         }
 
         $validated['is_active'] = $request->boolean('is_active');
@@ -48,7 +51,7 @@ class OfficialController extends Controller
 
     public function edit(Official $official)
     {
-        $divisions = Division::active()->ordered()->get();
+        $divisions = Division::active()->orderBy('order')->get();
         return view('admin.officials.edit', compact('official', 'divisions'));
     }
 
@@ -67,9 +70,11 @@ class OfficialController extends Controller
 
         if ($request->hasFile('photo')) {
             if ($official->photo) {
-                Storage::disk('public')->delete($official->photo);
+                StorageHelper::deleteFromBoth($official->photo);
             }
             $validated['photo'] = $request->file('photo')->store('officials', 'public');
+            // Auto-copy to public_html/storage for shared hosting
+            StorageHelper::copyToPublic($validated['photo'], 'officials');
         }
 
         $validated['is_active'] = $request->boolean('is_active');
@@ -82,7 +87,7 @@ class OfficialController extends Controller
     public function destroy(Official $official)
     {
         if ($official->photo) {
-            Storage::disk('public')->delete($official->photo);
+            StorageHelper::deleteFromBoth($official->photo);
         }
         $official->delete();
 

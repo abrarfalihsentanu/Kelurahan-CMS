@@ -11,7 +11,7 @@ class PpidController extends Controller
 {
     public function index()
     {
-        $categories = PpidCategory::ordered()->with('documents')->get();
+        $categories = PpidCategory::orderBy('order')->with('documents')->get();
         $documents = PpidDocument::published()->with('category')->get();
 
         return view('ppid', compact('categories', 'documents'));

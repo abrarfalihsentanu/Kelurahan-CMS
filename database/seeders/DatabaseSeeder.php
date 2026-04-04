@@ -92,7 +92,7 @@ class DatabaseSeeder extends Seeder
         ];
 
         foreach ($settings as $setting) {
-            Setting::create($setting);
+            Setting::updateOrCreate(['key' => $setting['key']], $setting);
         }
     }
 
@@ -107,6 +107,7 @@ class DatabaseSeeder extends Seeder
                 'button_text' => 'Baca Selengkapnya',
                 'button_link' => '/berita',
                 'order' => 1,
+                'is_active' => true,
             ],
             [
                 'title' => 'Sambut Ramadan, Kelurahan Gelar Bersih-Bersih Masjid',
@@ -116,6 +117,7 @@ class DatabaseSeeder extends Seeder
                 'button_text' => 'Baca Selengkapnya',
                 'button_link' => '/berita',
                 'order' => 2,
+                'is_active' => true,
             ],
             [
                 'title' => '60 Kader PKK Ikuti Pelatihan Makanan Sehat & Bergizi',
@@ -125,6 +127,7 @@ class DatabaseSeeder extends Seeder
                 'button_text' => 'Baca Selengkapnya',
                 'button_link' => '/berita',
                 'order' => 3,
+                'is_active' => true,
             ],
         ];
 
@@ -136,11 +139,11 @@ class DatabaseSeeder extends Seeder
     private function seedStatistics()
     {
         $stats = [
-            ['icon' => 'fa fa-map-marked-alt', 'value' => '90,10', 'label' => 'Hektar Luas Wilayah', 'order' => 1],
-            ['icon' => 'fa fa-layer-group', 'value' => '11', 'label' => 'Rukun Warga (RW)', 'order' => 2],
-            ['icon' => 'fa fa-home', 'value' => '116', 'label' => 'Rukun Tetangga (RT)', 'order' => 3],
-            ['icon' => 'fa fa-users', 'value' => '42.500+', 'label' => 'Jiwa Penduduk', 'order' => 4],
-            ['icon' => 'fa fa-star', 'value' => '96,4', 'label' => 'Nilai IKM', 'order' => 5],
+            ['icon' => 'fa fa-map-marked-alt', 'value' => '90,10', 'label' => 'Hektar Luas Wilayah', 'order' => 1, 'is_active' => true],
+            ['icon' => 'fa fa-layer-group', 'value' => '11', 'label' => 'Rukun Warga (RW)', 'order' => 2, 'is_active' => true],
+            ['icon' => 'fa fa-home', 'value' => '116', 'label' => 'Rukun Tetangga (RT)', 'order' => 3, 'is_active' => true],
+            ['icon' => 'fa fa-users', 'value' => '42.500+', 'label' => 'Jiwa Penduduk', 'order' => 4, 'is_active' => true],
+            ['icon' => 'fa fa-star', 'value' => '96,4', 'label' => 'Nilai IKM', 'order' => 5, 'is_active' => true],
         ];
 
         foreach ($stats as $stat) {
@@ -151,14 +154,17 @@ class DatabaseSeeder extends Seeder
     private function seedNews()
     {
         $categories = [
-            ['name' => 'Kegiatan', 'slug' => 'kegiatan', 'color' => 'kegiatan'],
-            ['name' => 'Sosial', 'slug' => 'sosial', 'color' => 'sosial'],
-            ['name' => 'PKK', 'slug' => 'pkk', 'color' => 'pkk'],
-            ['name' => 'Pemerintahan', 'slug' => 'pemerintahan', 'color' => 'pemerintahan'],
+            ['name' => 'Kegiatan', 'slug' => 'kegiatan', 'icon' => 'fa fa-tasks', 'description' => 'Kegiatan kelurahan', 'order' => 1, 'is_active' => true],
+            ['name' => 'Sosial', 'slug' => 'sosial', 'icon' => 'fa fa-users', 'description' => 'Program sosial', 'order' => 2, 'is_active' => true],
+            ['name' => 'PKK', 'slug' => 'pkk', 'icon' => 'fa fa-woman', 'description' => 'Program PKK', 'order' => 3, 'is_active' => true],
+            ['name' => 'Pemerintahan', 'slug' => 'pemerintahan', 'icon' => 'fa fa-building', 'description' => 'Berita pemerintahan', 'order' => 4, 'is_active' => true],
         ];
 
         foreach ($categories as $cat) {
-            NewsCategory::create($cat);
+            NewsCategory::updateOrCreate(
+                ['slug' => $cat['slug']],
+                $cat
+            );
         }
 
         $news = [
@@ -206,47 +212,59 @@ class DatabaseSeeder extends Seeder
         ];
 
         foreach ($news as $item) {
-            News::create($item);
+            News::updateOrCreate(
+                ['slug' => $item['slug']],
+                $item
+            );
         }
     }
 
     private function seedOfficials()
     {
         $divisions = [
-            ['name' => 'Seksi Pemerintahan', 'short_name' => 'Kasi Pemerintahan', 'order' => 1],
-            ['name' => 'Seksi Ekonomi dan Pembangunan', 'short_name' => 'Kasi Ekbang', 'order' => 2],
-            ['name' => 'Seksi Kesejahteraan Rakyat', 'short_name' => 'Kasi Kesra', 'order' => 3],
-            ['name' => 'Seksi Ketentraman dan Ketertiban', 'short_name' => 'Kasi Tramtib', 'order' => 4],
+            ['name' => 'Seksi Pemerintahan', 'short_name' => 'Kasi Pemerintahan', 'order' => 1, 'is_active' => true],
+            ['name' => 'Seksi Ekonomi dan Pembangunan', 'short_name' => 'Kasi Ekbang', 'order' => 2, 'is_active' => true],
+            ['name' => 'Seksi Kesejahteraan Rakyat', 'short_name' => 'Kasi Kesra', 'order' => 3, 'is_active' => true],
+            ['name' => 'Seksi Ketentraman dan Ketertiban', 'short_name' => 'Kasi Tramtib', 'order' => 4, 'is_active' => true],
         ];
 
         foreach ($divisions as $div) {
-            Division::create($div);
+            Division::updateOrCreate(
+                ['name' => $div['name']],
+                $div
+            );
         }
 
         $officials = [
-            ['name' => 'Rian Hermanu', 'position' => 'Lurah', 'level' => 'lurah', 'order' => 1],
-            ['name' => 'Siti Rahayu, S.E.', 'position' => 'Sekretaris Kelurahan', 'level' => 'sekretaris', 'order' => 2],
-            ['name' => 'Ahmad Fauzi', 'position' => 'Kasi Pemerintahan', 'level' => 'kasi', 'division_id' => 1, 'order' => 3],
-            ['name' => 'Dewi Kurniasih', 'position' => 'Kasi Ekbang', 'level' => 'kasi', 'division_id' => 2, 'order' => 4],
-            ['name' => 'Budi Santoso', 'position' => 'Kasi Kesra', 'level' => 'kasi', 'division_id' => 3, 'order' => 5],
-            ['name' => 'Rini Wahyuni', 'position' => 'Kasi Tramtib', 'level' => 'kasi', 'division_id' => 4, 'order' => 6],
+            ['name' => 'Rian Hermanu', 'position' => 'Lurah', 'level' => 'lurah', 'order' => 1, 'is_active' => true],
+            ['name' => 'Siti Rahayu, S.E.', 'position' => 'Sekretaris Kelurahan', 'level' => 'sekretaris', 'order' => 2, 'is_active' => true],
+            ['name' => 'Ahmad Fauzi', 'position' => 'Kasi Pemerintahan', 'level' => 'kasi', 'division_id' => 1, 'order' => 3, 'is_active' => true],
+            ['name' => 'Dewi Kurniasih', 'position' => 'Kasi Ekbang', 'level' => 'kasi', 'division_id' => 2, 'order' => 4, 'is_active' => true],
+            ['name' => 'Budi Santoso', 'position' => 'Kasi Kesra', 'level' => 'kasi', 'division_id' => 3, 'order' => 5, 'is_active' => true],
+            ['name' => 'Rini Wahyuni', 'position' => 'Kasi Tramtib', 'level' => 'kasi', 'division_id' => 4, 'order' => 6, 'is_active' => true],
         ];
 
         foreach ($officials as $official) {
-            Official::create($official);
+            Official::updateOrCreate(
+                ['name' => $official['name']],
+                $official
+            );
         }
     }
 
     private function seedServices()
     {
         $categories = [
-            ['name' => 'Administrasi Kependudukan', 'slug' => 'administrasi-kependudukan', 'icon' => 'fa fa-id-card'],
-            ['name' => 'Surat Keterangan', 'slug' => 'surat-keterangan', 'icon' => 'fa fa-file-alt'],
-            ['name' => 'Perizinan', 'slug' => 'perizinan', 'icon' => 'fa fa-stamp'],
+            ['name' => 'Administrasi Kependudukan', 'slug' => 'administrasi-kependudukan', 'icon' => 'fa fa-id-card', 'is_active' => true],
+            ['name' => 'Surat Keterangan', 'slug' => 'surat-keterangan', 'icon' => 'fa fa-file-alt', 'is_active' => true],
+            ['name' => 'Perizinan', 'slug' => 'perizinan', 'icon' => 'fa fa-stamp', 'is_active' => true],
         ];
 
         foreach ($categories as $cat) {
-            ServiceCategory::create($cat);
+            ServiceCategory::updateOrCreate(
+                ['slug' => $cat['slug']],
+                $cat
+            );
         }
 
         $services = [
@@ -261,6 +279,7 @@ class DatabaseSeeder extends Seeder
                 'cost' => 'Gratis',
                 'schedule' => 'Senin–Jumat',
                 'order' => 1,
+                'is_active' => true,
             ],
             [
                 'service_category_id' => 1,
@@ -273,6 +292,7 @@ class DatabaseSeeder extends Seeder
                 'cost' => 'Gratis',
                 'schedule' => 'Senin–Jumat',
                 'order' => 2,
+                'is_active' => true,
             ],
             [
                 'service_category_id' => 2,
@@ -285,6 +305,7 @@ class DatabaseSeeder extends Seeder
                 'cost' => 'Gratis',
                 'schedule' => 'Senin–Jumat',
                 'order' => 3,
+                'is_active' => true,
             ],
             [
                 'service_category_id' => 2,
@@ -297,6 +318,7 @@ class DatabaseSeeder extends Seeder
                 'cost' => 'Gratis',
                 'schedule' => 'Senin–Jumat',
                 'order' => 4,
+                'is_active' => true,
             ],
             [
                 'service_category_id' => 1,
@@ -309,6 +331,7 @@ class DatabaseSeeder extends Seeder
                 'cost' => 'Gratis',
                 'schedule' => 'Senin–Jumat',
                 'order' => 5,
+                'is_active' => true,
             ],
             [
                 'service_category_id' => 3,
@@ -321,11 +344,15 @@ class DatabaseSeeder extends Seeder
                 'cost' => 'Gratis',
                 'schedule' => 'Senin–Jumat',
                 'order' => 6,
+                'is_active' => true,
             ],
         ];
 
         foreach ($services as $service) {
-            Service::create($service);
+            Service::updateOrCreate(
+                ['slug' => $service['slug']],
+                $service
+            );
         }
     }
 
@@ -342,7 +369,10 @@ class DatabaseSeeder extends Seeder
         ];
 
         foreach ($hours as $hour) {
-            ServiceHour::create($hour);
+            ServiceHour::updateOrCreate(
+                ['day' => $hour['day']],
+                $hour
+            );
         }
     }
 
@@ -388,38 +418,47 @@ class DatabaseSeeder extends Seeder
         ];
 
         foreach ($agendas as $agenda) {
-            Agenda::create($agenda);
+            Agenda::updateOrCreate(
+                ['title' => $agenda['title']],
+                $agenda
+            );
         }
     }
 
     private function seedComplaintCategories()
     {
         $categories = [
-            ['name' => 'Infrastruktur', 'slug' => 'infrastruktur', 'icon' => 'fa fa-road'],
-            ['name' => 'Kebersihan', 'slug' => 'kebersihan', 'icon' => 'fa fa-broom'],
-            ['name' => 'Keamanan', 'slug' => 'keamanan', 'icon' => 'fa fa-shield-alt'],
-            ['name' => 'Pelayanan', 'slug' => 'pelayanan', 'icon' => 'fa fa-headset'],
-            ['name' => 'Lainnya', 'slug' => 'lainnya', 'icon' => 'fa fa-ellipsis-h'],
+            ['name' => 'Infrastruktur', 'slug' => 'infrastruktur', 'icon' => 'fa fa-road', 'is_active' => true],
+            ['name' => 'Kebersihan', 'slug' => 'kebersihan', 'icon' => 'fa fa-broom', 'is_active' => true],
+            ['name' => 'Keamanan', 'slug' => 'keamanan', 'icon' => 'fa fa-shield-alt', 'is_active' => true],
+            ['name' => 'Pelayanan', 'slug' => 'pelayanan', 'icon' => 'fa fa-headset', 'is_active' => true],
+            ['name' => 'Lainnya', 'slug' => 'lainnya', 'icon' => 'fa fa-ellipsis-h', 'is_active' => true],
         ];
 
         foreach ($categories as $cat) {
-            ComplaintCategory::create($cat);
+            ComplaintCategory::updateOrCreate(
+                ['slug' => $cat['slug']],
+                $cat
+            );
         }
     }
 
     private function seedPpidCategories()
     {
         $categories = [
-            ['name' => 'Struktur PPID', 'slug' => 'struktur-ppid', 'icon' => 'fa fa-sitemap', 'description' => 'Susunan organisasi Pejabat Pengelola Informasi dan Dokumentasi Kelurahan Petamburan', 'order' => 1],
-            ['name' => 'Tugas dan Fungsi PPID', 'slug' => 'tugas-fungsi-ppid', 'icon' => 'fa fa-tasks', 'description' => 'Uraian tugas pokok dan fungsi PPID dalam pengelolaan informasi publik', 'order' => 2],
-            ['name' => 'Dokumen Informasi Publik', 'slug' => 'dokumen-informasi-publik', 'icon' => 'fa fa-folder-open', 'description' => 'Daftar dokumen informasi publik yang tersedia untuk diakses masyarakat', 'order' => 3],
-            ['name' => 'Waktu & Biaya Layanan', 'slug' => 'waktu-biaya-layanan', 'icon' => 'fa fa-clock', 'description' => 'Informasi mengenai standar waktu dan biaya dalam pelayanan informasi publik', 'order' => 4],
-            ['name' => 'Informasi Berkala', 'slug' => 'informasi-berkala', 'icon' => 'fa fa-calendar-alt', 'description' => 'Informasi yang wajib disediakan dan diumumkan secara berkala kepada publik', 'order' => 5],
-            ['name' => 'SOP PPID', 'slug' => 'sop-ppid', 'icon' => 'fa fa-project-diagram', 'description' => 'Standar Operasional Prosedur pelayanan informasi dan penanganan sengketa', 'order' => 6],
+            ['name' => 'Struktur PPID', 'slug' => 'struktur-ppid', 'icon' => 'fa fa-sitemap', 'description' => 'Susunan organisasi Pejabat Pengelola Informasi dan Dokumentasi Kelurahan Petamburan', 'order' => 1, 'is_active' => true],
+            ['name' => 'Tugas dan Fungsi PPID', 'slug' => 'tugas-fungsi-ppid', 'icon' => 'fa fa-tasks', 'description' => 'Uraian tugas pokok dan fungsi PPID dalam pengelolaan informasi publik', 'order' => 2, 'is_active' => true],
+            ['name' => 'Dokumen Informasi Publik', 'slug' => 'dokumen-informasi-publik', 'icon' => 'fa fa-folder-open', 'description' => 'Daftar dokumen informasi publik yang tersedia untuk diakses masyarakat', 'order' => 3, 'is_active' => true],
+            ['name' => 'Waktu & Biaya Layanan', 'slug' => 'waktu-biaya-layanan', 'icon' => 'fa fa-clock', 'description' => 'Informasi mengenai standar waktu dan biaya dalam pelayanan informasi publik', 'order' => 4, 'is_active' => true],
+            ['name' => 'Informasi Berkala', 'slug' => 'informasi-berkala', 'icon' => 'fa fa-calendar-alt', 'description' => 'Informasi yang wajib disediakan dan diumumkan secara berkala kepada publik', 'order' => 5, 'is_active' => true],
+            ['name' => 'SOP PPID', 'slug' => 'sop-ppid', 'icon' => 'fa fa-project-diagram', 'description' => 'Standar Operasional Prosedur pelayanan informasi dan penanganan sengketa', 'order' => 6, 'is_active' => true],
         ];
 
         foreach ($categories as $cat) {
-            PpidCategory::create($cat);
+            PpidCategory::updateOrCreate(
+                ['name' => $cat['name']],
+                $cat
+            );
         }
     }
 }

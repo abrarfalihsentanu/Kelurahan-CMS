@@ -26,7 +26,7 @@
                         <tr>
                             <td>
                                 @if ($slider->image)
-                                    <img src="{{ Storage::url($slider->image) }}" alt="" class="rounded"
+                                    <img src="{{ asset('storage/' . $slider->image) }}" alt="" class="rounded"
                                         style="width:60px;height:40px;object-fit:cover">
                                 @else
                                     <span class="text-muted">-</span>

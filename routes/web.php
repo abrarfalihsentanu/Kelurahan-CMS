@@ -81,19 +81,27 @@ Route::get('/berita/{slug}', [BeritaController::class, 'show'])->name('berita.sh
 
 // Pengaduan
 Route::get('/pengaduan', [PengaduanController::class, 'index'])->name('pengaduan');
-Route::post('/pengaduan', [PengaduanController::class, 'store'])->name('pengaduan.store');
+Route::post('/pengaduan', [PengaduanController::class, 'store'])
+    ->middleware('throttle:10,1')
+    ->name('pengaduan.store');
 Route::get('/pengaduan/tracking', [PengaduanController::class, 'tracking'])->name('pengaduan.tracking');
 
 // PPID
 Route::get('/ppid', [PpidController::class, 'index'])->name('ppid');
-Route::post('/ppid/permohonan', [PpidController::class, 'storeRequest'])->name('ppid.request');
-Route::post('/ppid/keberatan', [PpidController::class, 'storeKeberatan'])->name('ppid.keberatan');
+Route::post('/ppid/permohonan', [PpidController::class, 'storeRequest'])
+    ->middleware('throttle:5,1')
+    ->name('ppid.request');
+Route::post('/ppid/keberatan', [PpidController::class, 'storeKeberatan'])
+    ->middleware('throttle:5,1')
+    ->name('ppid.keberatan');
 Route::get('/ppid/tracking', [PpidController::class, 'tracking'])->name('ppid.tracking');
 Route::get('/ppid/download/{document}', [PpidController::class, 'download'])->name('ppid.download');
 
 // Kontak
 Route::get('/kontak', [KontakController::class, 'index'])->name('kontak');
-Route::post('/kontak', [KontakController::class, 'store'])->name('kontak.store');
+Route::post('/kontak', [KontakController::class, 'store'])
+    ->middleware('throttle:10,1')
+    ->name('kontak.store');
 Route::get('/kontak/tracking', [KontakController::class, 'tracking'])->name('kontak.tracking');
 
 // Halaman Statis

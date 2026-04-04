@@ -4,7 +4,7 @@
 @section('content')
     <div class="card">
         <div class="card-header d-flex justify-content-between align-items-center">
-            <span><i class="fas fa-folder-open me-2"></i>Daftar Kategori Layanan</span>
+            <span><i class="fas fa-folder me-2"></i>Daftar Kategori Layanan</span>
             <a href="{{ route('admin.service-categories.create') }}" class="btn btn-primary btn-sm">
                 <i class="fas fa-plus me-1"></i>Tambah Kategori
             </a>

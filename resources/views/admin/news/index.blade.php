@@ -26,7 +26,7 @@
                         <tr>
                             <td>
                                 @if ($item->image)
-                                    <img src="{{ Storage::url($item->image) }}" alt="" class="rounded"
+                                    <img src="{{ asset('storage/' . $item->image) }}" alt="" class="rounded"
                                         style="width:60px;height:40px;object-fit:cover">
                                 @else
                                     <span class="text-muted">-</span>

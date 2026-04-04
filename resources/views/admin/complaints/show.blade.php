@@ -85,7 +85,7 @@
                         <h6 class="fw-bold">Lampiran</h6>
                         <div class="d-flex flex-wrap gap-2">
                             @foreach ($complaint->attachments as $i => $attachment)
-                                <a href="{{ Storage::url($attachment) }}" target="_blank"
+                                <a href="{{ asset('storage/' . $attachment) }}" target="_blank"
                                     class="btn btn-outline-primary btn-sm">
                                     <i class="fas fa-download me-1"></i>Lampiran {{ $i + 1 }}
                                 </a>

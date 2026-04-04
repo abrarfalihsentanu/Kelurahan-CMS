@@ -12,13 +12,13 @@ class PpidDocumentController extends Controller
 {
     public function index()
     {
-        $documents = PpidDocument::with('category')->ordered()->get();
+        $documents = PpidDocument::with('category')->orderBy('order')->get();
         return view('admin.ppid-documents.index', compact('documents'));
     }
 
     public function create()
     {
-        $categories = PpidCategory::active()->ordered()->get();
+        $categories = PpidCategory::active()->orderBy('order')->get();
         return view('admin.ppid-documents.create', compact('categories'));
     }
 
@@ -49,7 +49,7 @@ class PpidDocumentController extends Controller
 
     public function edit(PpidDocument $ppidDocument)
     {
-        $categories = PpidCategory::active()->ordered()->get();
+        $categories = PpidCategory::active()->orderBy('order')->get();
         return view('admin.ppid-documents.edit', compact('ppidDocument', 'categories'));
     }
 

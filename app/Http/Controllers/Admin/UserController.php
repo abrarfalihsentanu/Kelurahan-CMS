@@ -27,10 +27,12 @@ class UserController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|email|max:255|unique:users,email',
             'password' => 'required|string|min:8|confirmed',
+            'is_admin' => 'nullable|boolean',
             'is_active' => 'nullable|boolean',
         ]);
 
         $validated['password'] = Hash::make($validated['password']);
+        $validated['is_admin'] = $request->has('is_admin') ? 1 : 0;
         $validated['is_active'] = $request->has('is_active') ? 1 : 0;
 
         User::create($validated);
@@ -49,9 +51,11 @@ class UserController extends Controller
             'name' => 'required|string|max:255',
             'email' => ['required', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
             'password' => 'nullable|string|min:8|confirmed',
+            'is_admin' => 'nullable|boolean',
             'is_active' => 'nullable|boolean',
         ]);
 
+        $validated['is_admin'] = $request->has('is_admin') ? 1 : 0;
         $validated['is_active'] = $request->has('is_active') ? 1 : 0;
 
         if (!empty($validated['password'])) {

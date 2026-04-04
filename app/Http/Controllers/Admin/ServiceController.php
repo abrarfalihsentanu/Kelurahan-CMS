@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Service;
 use App\Models\ServiceCategory;
+use App\Helpers\StorageHelper;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
@@ -13,13 +14,13 @@ class ServiceController extends Controller
 {
     public function index()
     {
-        $services = Service::with('category')->ordered()->get();
+        $services = Service::with('category')->orderBy('order')->get();
         return view('admin.services.index', compact('services'));
     }
 
     public function create()
     {
-        $categories = ServiceCategory::active()->ordered()->get();
+        $categories = ServiceCategory::active()->orderBy('order')->get();
         return view('admin.services.create', compact('categories'));
     }
 
@@ -46,6 +47,8 @@ class ServiceController extends Controller
 
         if ($request->hasFile('image')) {
             $validated['image'] = $request->file('image')->store('services', 'public');
+            // Auto-copy to public_html/storage for shared hosting
+            StorageHelper::copyToPublic($validated['image'], 'services');
         }
 
         $validated['is_active'] = $request->boolean('is_active');
@@ -57,7 +60,7 @@ class ServiceController extends Controller
 
     public function edit(Service $service)
     {
-        $categories = ServiceCategory::active()->ordered()->get();
+        $categories = ServiceCategory::active()->orderBy('order')->get();
         return view('admin.services.edit', compact('service', 'categories'));
     }
 
@@ -84,9 +87,11 @@ class ServiceController extends Controller
 
         if ($request->hasFile('image')) {
             if ($service->image) {
-                Storage::disk('public')->delete($service->image);
+                StorageHelper::deleteFromBoth($service->image);
             }
             $validated['image'] = $request->file('image')->store('services', 'public');
+            // Auto-copy to public_html/storage for shared hosting
+            StorageHelper::copyToPublic($validated['image'], 'services');
         }
 
         $validated['is_active'] = $request->boolean('is_active');
@@ -99,7 +104,7 @@ class ServiceController extends Controller
     public function destroy(Service $service)
     {
         if ($service->image) {
-            Storage::disk('public')->delete($service->image);
+            StorageHelper::deleteFromBoth($service->image);
         }
         $service->delete();
 

@@ -23,6 +23,15 @@ class LoginController extends Controller
             'password' => 'required',
         ]);
 
+        // Check if user exists and is active
+        $user = \App\Models\User::where('email', $credentials['email'])->first();
+
+        if ($user && !$user->is_active) {
+            return back()->withErrors([
+                'email' => 'Akun anda belum diaktifkan.',
+            ])->onlyInput('email');
+        }
+
         if (Auth::attempt($credentials, $request->boolean('remember'))) {
             $request->session()->regenerate();
             return redirect()->intended(route('admin.dashboard'));

@@ -16,6 +16,12 @@
                 value="{{ old('name', $category->name ?? '') }}" required>
         </div>
         <div class="mb-3">
+            <label class="form-label">Icon</label>
+            <input type="text" name="icon" class="form-control @error('icon') is-invalid @enderror"
+                value="{{ old('icon', $category->icon ?? '') }}" placeholder="fas fa-file-alt">
+            <small class="text-muted">Gunakan class Font Awesome, contoh: fas fa-file-alt</small>
+        </div>
+        <div class="mb-3">
             <label class="form-label">Deskripsi</label>
             <textarea name="description" class="form-control @error('description') is-invalid @enderror" rows="3">{{ old('description', $category->description ?? '') }}</textarea>
         </div>

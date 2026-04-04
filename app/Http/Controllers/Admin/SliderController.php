@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Slider;
+use App\Helpers\StorageHelper;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -11,7 +12,7 @@ class SliderController extends Controller
 {
     public function index()
     {
-        $sliders = Slider::ordered()->get();
+        $sliders = Slider::orderBy('order')->get();
         return view('admin.sliders.index', compact('sliders'));
     }
 
@@ -34,6 +35,8 @@ class SliderController extends Controller
 
         if ($request->hasFile('image')) {
             $validated['image'] = $request->file('image')->store('sliders', 'public');
+            // Auto-copy to public_html/storage for shared hosting
+            StorageHelper::copyToPublic($validated['image'], 'sliders');
         }
 
         $validated['is_active'] = $request->boolean('is_active');
@@ -63,9 +66,11 @@ class SliderController extends Controller
 
         if ($request->hasFile('image')) {
             if ($slider->image) {
-                Storage::disk('public')->delete($slider->image);
+                StorageHelper::deleteFromBoth($slider->image);
             }
             $validated['image'] = $request->file('image')->store('sliders', 'public');
+            // Auto-copy to public_html/storage for shared hosting
+            StorageHelper::copyToPublic($validated['image'], 'sliders');
         }
 
         $validated['is_active'] = $request->boolean('is_active');
@@ -79,7 +84,7 @@ class SliderController extends Controller
     public function destroy(Slider $slider)
     {
         if ($slider->image) {
-            Storage::disk('public')->delete($slider->image);
+            StorageHelper::deleteFromBoth($slider->image);
         }
         $slider->delete();
 

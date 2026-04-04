@@ -42,7 +42,7 @@
             <input type="file" name="image" class="form-control @error('image') is-invalid @enderror"
                 accept="image/*">
             @if (isset($slider) && $slider->image)
-                <img src="{{ Storage::url($slider->image) }}" alt="" class="mt-2 rounded"
+                <img src="{{ asset('storage/' . $slider->image) }}" alt="" class="mt-2 rounded"
                     style="max-width:100%;max-height:150px">
             @endif
         </div>

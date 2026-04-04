@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Page;
+use App\Helpers\StorageHelper;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
@@ -12,7 +13,7 @@ class PageController extends Controller
 {
     public function index()
     {
-        $pages = Page::ordered()->get();
+        $pages = Page::orderBy('order')->get();
         return view('admin.pages.index', compact('pages'));
     }
 
@@ -39,6 +40,8 @@ class PageController extends Controller
 
         if ($request->hasFile('image')) {
             $validated['image'] = $request->file('image')->store('pages', 'public');
+            // Auto-copy to public_html/storage for shared hosting
+            StorageHelper::copyToPublic($validated['image'], 'pages');
         }
 
         $validated['is_published'] = $request->boolean('is_active');
@@ -72,9 +75,11 @@ class PageController extends Controller
 
         if ($request->hasFile('image')) {
             if ($page->image) {
-                Storage::disk('public')->delete($page->image);
+                StorageHelper::deleteFromBoth($page->image);
             }
             $validated['image'] = $request->file('image')->store('pages', 'public');
+            // Auto-copy to public_html/storage for shared hosting
+            StorageHelper::copyToPublic($validated['image'], 'pages');
         }
 
         $validated['is_published'] = $request->boolean('is_active');
@@ -88,7 +93,7 @@ class PageController extends Controller
     public function destroy(Page $page)
     {
         if ($page->image) {
-            Storage::disk('public')->delete($page->image);
+            StorageHelper::deleteFromBoth($page->image);
         }
         $page->delete();
 

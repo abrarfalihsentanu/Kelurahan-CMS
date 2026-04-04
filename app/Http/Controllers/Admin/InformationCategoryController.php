@@ -11,7 +11,7 @@ class InformationCategoryController extends Controller
 {
     public function index()
     {
-        $categories = InformationCategory::ordered()
+        $categories = InformationCategory::orderBy('order')
             ->withCount(['infographics', 'potentials'])
             ->get();
         return view('admin.information-categories.index', compact('categories'));

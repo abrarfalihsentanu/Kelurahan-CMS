@@ -50,6 +50,20 @@
     </div>
     <div class="col-md-4">
         <div class="mb-3">
+            <label class="form-label">Status Agenda</label>
+            <select name="status" class="form-control @error('status') is-invalid @enderror">
+                <option value="upcoming"
+                    {{ old('status', $agenda->status ?? 'upcoming') === 'upcoming' ? 'selected' : '' }}>Akan Datang
+                </option>
+                <option value="ongoing"
+                    {{ old('status', $agenda->status ?? 'upcoming') === 'ongoing' ? 'selected' : '' }}>Sedang
+                    Berlangsung</option>
+                <option value="completed"
+                    {{ old('status', $agenda->status ?? 'upcoming') === 'completed' ? 'selected' : '' }}>Selesai
+                </option>
+            </select>
+        </div>
+        <div class="mb-3">
             <div class="form-check form-switch">
                 <input type="checkbox" name="is_published" class="form-check-input" value="1" id="is_published"
                     {{ old('is_published', $agenda->is_published ?? true) ? 'checked' : '' }}>

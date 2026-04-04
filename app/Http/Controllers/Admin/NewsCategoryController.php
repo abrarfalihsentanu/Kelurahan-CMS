@@ -11,7 +11,7 @@ class NewsCategoryController extends Controller
 {
     public function index()
     {
-        $categories = NewsCategory::withCount('news')->ordered()->get();
+        $categories = NewsCategory::orderBy('order')->get();
         return view('admin.news-categories.index', compact('categories'));
     }
 
@@ -25,6 +25,7 @@ class NewsCategoryController extends Controller
         $validated = $request->validate([
             'name' => 'required|max:100',
             'slug' => 'nullable|max:100|unique:news_categories',
+            'icon' => 'nullable|max:100',
             'description' => 'nullable|max:500',
             'order' => 'nullable|integer',
             'is_active' => 'boolean',
@@ -41,7 +42,10 @@ class NewsCategoryController extends Controller
 
     public function edit(NewsCategory $newsCategory)
     {
-        return view('admin.news-categories.edit', compact('newsCategory'));
+        return view('admin.news-categories.edit', [
+            'newsCategory' => $newsCategory,
+            'category' => $newsCategory,
+        ]);
     }
 
     public function update(Request $request, NewsCategory $newsCategory)
@@ -49,6 +53,7 @@ class NewsCategoryController extends Controller
         $validated = $request->validate([
             'name' => 'required|max:100',
             'slug' => 'nullable|max:100|unique:news_categories,slug,' . $newsCategory->id,
+            'icon' => 'nullable|max:100',
             'description' => 'nullable|max:500',
             'order' => 'nullable|integer',
             'is_active' => 'boolean',

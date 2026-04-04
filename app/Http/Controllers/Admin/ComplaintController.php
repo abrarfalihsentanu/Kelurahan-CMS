@@ -10,7 +10,7 @@ class ComplaintController extends Controller
 {
     public function index()
     {
-        $complaints = Complaint::with('category')->latest()->get();
+        $complaints = Complaint::with('category')->latest()->paginate(25);
         return view('admin.complaints.index', compact('complaints'));
     }
 

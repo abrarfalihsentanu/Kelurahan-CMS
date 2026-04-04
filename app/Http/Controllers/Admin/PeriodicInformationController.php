@@ -11,7 +11,16 @@ class PeriodicInformationController extends Controller
 {
     public function index()
     {
-        $documents = PeriodicInformation::ordered()->get();
+        $documents = PeriodicInformation::orderBy('order')->get();
+
+        // Convert file paths to URLs
+        $documents->transform(function ($doc) {
+            if ($doc->file) {
+                $doc->file_url = Storage::url($doc->file);
+            }
+            return $doc;
+        });
+
         return view('admin.periodic-informations.index', compact('documents'));
     }
 
@@ -48,6 +57,11 @@ class PeriodicInformationController extends Controller
 
     public function edit(PeriodicInformation $periodicInformation)
     {
+        // Convert file path to URL
+        if ($periodicInformation->file) {
+            $periodicInformation->file_url = Storage::url($periodicInformation->file);
+        }
+
         return view('admin.periodic-informations.edit', compact('periodicInformation'));
     }
 

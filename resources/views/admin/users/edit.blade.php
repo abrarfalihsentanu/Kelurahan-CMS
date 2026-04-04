@@ -14,7 +14,7 @@
             <form action="{{ route('admin.users.update', $user) }}" method="POST">
                 @csrf
                 @method('PUT')
-                @include('admin.users._form')
+                @include('admin.users._form', ['user' => $user])
                 <div class="mt-4">
                     <button type="submit" class="btn btn-primary">
                         <i class="fas fa-save me-1"></i>Perbarui

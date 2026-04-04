@@ -10,7 +10,7 @@ class StatisticController extends Controller
 {
     public function index()
     {
-        $statistics = Statistic::ordered()->get();
+        $statistics = Statistic::orderBy('order')->get();
         return view('admin.statistics.index', compact('statistics'));
     }
 

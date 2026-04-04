@@ -34,7 +34,10 @@ class InformasiSeeder extends Seeder
         ];
 
         foreach ($categories as $category) {
-            InformationCategory::create($category);
+            InformationCategory::updateOrCreate(
+                ['slug' => $category['slug']],
+                $category
+            );
         }
     }
 
@@ -104,7 +107,10 @@ class InformasiSeeder extends Seeder
         ];
 
         foreach ($achievements as $achievement) {
-            Achievement::create($achievement);
+            Achievement::updateOrCreate(
+                ['title' => $achievement['title']],
+                $achievement
+            );
         }
     }
 
@@ -223,7 +229,10 @@ class InformasiSeeder extends Seeder
         ];
 
         foreach ($infographics as $infographic) {
-            Infographic::create($infographic);
+            Infographic::updateOrCreate(
+                ['title' => $infographic['title']],
+                $infographic
+            );
         }
     }
 
@@ -288,7 +297,10 @@ class InformasiSeeder extends Seeder
         ];
 
         foreach ($potentials as $potential) {
-            Potential::create($potential);
+            Potential::updateOrCreate(
+                ['title' => $potential['title']],
+                $potential
+            );
         }
     }
 }

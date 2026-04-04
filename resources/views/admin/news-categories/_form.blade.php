@@ -16,10 +16,10 @@
                 value="{{ old('name', $category->name ?? '') }}" required>
         </div>
         <div class="mb-3">
-            <label class="form-label">Slug</label>
-            <input type="text" name="slug" class="form-control @error('slug') is-invalid @enderror"
-                value="{{ old('slug', $category->slug ?? '') }}" placeholder="otomatis-dari-nama">
-            <small class="text-muted">Biarkan kosong untuk generate otomatis dari nama</small>
+            <label class="form-label">Icon</label>
+            <input type="text" name="icon" class="form-control @error('icon') is-invalid @enderror"
+                value="{{ old('icon', $category->icon ?? '') }}" placeholder="fas fa-file-alt">
+            <small class="text-muted">Gunakan class Font Awesome, contoh: fas fa-file-alt</small>
         </div>
         <div class="mb-3">
             <label class="form-label">Deskripsi</label>

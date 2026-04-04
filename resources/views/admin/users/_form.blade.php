@@ -70,6 +70,15 @@
 
                 <div class="mb-3">
                     <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" name="is_admin" id="is_admin" value="1"
+                            {{ old('is_admin', $user->is_admin ?? 1) ? 'checked' : '' }}>
+                        <label class="form-check-label" for="is_admin">Admin</label>
+                    </div>
+                    <small class="text-muted">Centang untuk memberikan akses admin.</small>
+                </div>
+
+                <div class="mb-3">
+                    <div class="form-check form-switch">
                         <input class="form-check-input" type="checkbox" name="is_active" id="is_active" value="1"
                             {{ old('is_active', $user->is_active ?? 1) ? 'checked' : '' }}>
                         <label class="form-check-label" for="is_active">Akun Aktif</label>

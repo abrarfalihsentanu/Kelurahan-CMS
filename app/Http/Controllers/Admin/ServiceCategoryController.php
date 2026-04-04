@@ -11,7 +11,7 @@ class ServiceCategoryController extends Controller
 {
     public function index()
     {
-        $categories = ServiceCategory::withCount('services')->ordered()->get();
+        $categories = ServiceCategory::orderBy('order')->get();
         return view('admin.service-categories.index', compact('categories'));
     }
 
@@ -41,7 +41,10 @@ class ServiceCategoryController extends Controller
 
     public function edit(ServiceCategory $serviceCategory)
     {
-        return view('admin.service-categories.edit', compact('serviceCategory'));
+        return view('admin.service-categories.edit', [
+            'serviceCategory' => $serviceCategory,
+            'category' => $serviceCategory,
+        ]);
     }
 
     public function update(Request $request, ServiceCategory $serviceCategory)

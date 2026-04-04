@@ -15,9 +15,9 @@
                     <tr>
                         <th width="80">Gambar</th>
                         <th>Judul</th>
-                        <th>Kategori</th>
-                        <th>Tanggal</th>
-                        <th width="80">Status</th>
+                        <th>Tingkat</th>
+                        <th>Tahun</th>
+                        <th width="100">Status</th>
                         <th width="120">Aksi</th>
                     </tr>
                 </thead>
@@ -26,18 +26,17 @@
                         <tr>
                             <td>
                                 @if ($achievement->image)
-                                    <img src="{{ Storage::url($achievement->image) }}" alt="" class="rounded"
+                                    <img src="{{ asset('storage/' . $achievement->image) }}" alt="" class="rounded"
                                         style="width:60px;height:40px;object-fit:cover">
                                 @else
                                     <span class="text-muted">-</span>
                                 @endif
                             </td>
                             <td>{{ $achievement->title }}</td>
-                            <td>{{ $achievement->category ?? '-' }}</td>
-                            <td>{{ $achievement->date ? \Carbon\Carbon::parse($achievement->date)->format('d M Y') : '-' }}
-                            </td>
+                            <td>{{ $achievement->level ?? '-' }}</td>
+                            <td>{{ $achievement->year ?? '-' }}</td>
                             <td>
-                                @if ($achievement->is_active)
+                                @if ($achievement->is_published)
                                     <span class="badge bg-success">Aktif</span>
                                 @else
                                     <span class="badge bg-secondary">Nonaktif</span>

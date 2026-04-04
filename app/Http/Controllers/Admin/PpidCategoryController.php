@@ -10,7 +10,7 @@ class PpidCategoryController extends Controller
 {
     public function index()
     {
-        $categories = PpidCategory::withCount('documents')->ordered()->get();
+        $categories = PpidCategory::withCount('documents')->orderBy('order')->get();
         return view('admin.ppid-categories.index', compact('categories'));
     }
 
@@ -38,7 +38,10 @@ class PpidCategoryController extends Controller
 
     public function edit(PpidCategory $ppidCategory)
     {
-        return view('admin.ppid-categories.edit', compact('ppidCategory'));
+        return view('admin.ppid-categories.edit', [
+            'ppidCategory' => $ppidCategory,
+            'category' => $ppidCategory,
+        ]);
     }
 
     public function update(Request $request, PpidCategory $ppidCategory)

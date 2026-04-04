@@ -29,11 +29,12 @@ class AgendaController extends Controller
             'end_time' => 'nullable',
             'location' => 'nullable|max:255',
             'organizer' => 'nullable|max:100',
-            'status' => 'nullable|max:50',
+            'status' => 'nullable|in:upcoming,ongoing,completed',
             'is_published' => 'boolean',
         ]);
 
         $validated['is_published'] = $request->boolean('is_published');
+        $validated['status'] = $validated['status'] ?? 'upcoming';
         Agenda::create($validated);
 
         return redirect()->route('admin.agendas.index')
@@ -55,11 +56,12 @@ class AgendaController extends Controller
             'end_time' => 'nullable',
             'location' => 'nullable|max:255',
             'organizer' => 'nullable|max:100',
-            'status' => 'nullable|max:50',
+            'status' => 'nullable|in:upcoming,ongoing,completed',
             'is_published' => 'boolean',
         ]);
 
         $validated['is_published'] = $request->boolean('is_published');
+        $validated['status'] = $validated['status'] ?? 'upcoming';
         $agenda->update($validated);
 
         return redirect()->route('admin.agendas.index')
