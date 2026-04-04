@@ -3,6 +3,7 @@
 namespace App\Helpers;
 
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Log;
 
 class StorageHelper
 {
@@ -37,7 +38,7 @@ class StorageHelper
             return false;
         } catch (\Exception $e) {
             // Log error if needed
-            \Log::warning('StorageHelper::copyToPublic failed: ' . $e->getMessage());
+            Log::warning('StorageHelper::copyToPublic failed: ' . $e->getMessage());
             return false;
         }
     }
@@ -65,7 +66,7 @@ class StorageHelper
 
             return true;
         } catch (\Exception $e) {
-            \Log::warning('StorageHelper::deleteFromBoth failed: ' . $e->getMessage());
+            Log::warning('StorageHelper::deleteFromBoth failed: ' . $e->getMessage());
             return false;
         }
     }
