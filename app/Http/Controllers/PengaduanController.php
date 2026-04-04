@@ -16,12 +16,11 @@ class PengaduanController extends Controller
         $complaints = Complaint::with('category')->latest()->paginate(10);
 
         // Convert attachment paths to URLs
-        $complaints->each(function ($complaint) {
+        foreach ($complaints as $complaint) {
             if ($complaint->attachments && is_array($complaint->attachments)) {
                 $complaint->attachment_urls = array_map(fn($path) => Storage::url($path), $complaint->attachments);
             }
-            return $complaint;
-        });
+        }
 
         return view('pengaduan', compact('categories', 'complaints'));
     }
